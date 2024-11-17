@@ -20,8 +20,6 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - run: cd tutor-assistant
-
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
@@ -34,14 +32,14 @@ jobs:
           context: tutor-assistant
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/tutor-assistant:latest
+          cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/tutor-assistant:latest
+          cache-to: type=inline
 
   build-tutor-assistant-app-service:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
-
-      - run: cd tutor-assistant
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -55,14 +53,14 @@ jobs:
           context: tutor-assistant-app-service
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/tutor-assistant-app-service:latest
+          cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/tutor-assistant-app-service:latest
+          cache-to: type=inline
 
   build-tutor-assistant-web:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
-
-      - run: cd tutor-assistant
 
       - name: Login to Docker Hub
         uses: docker/login-action@v3
@@ -73,6 +71,8 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
-          context: tutor-assistant-web
+          context: tutor-assistent-web
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/tutor-assistant-web:latest
+          cache-from: type=registry,ref=${{ secrets.DOCKERHUB_USERNAME }}/tutor-assistant-web:latest
+          cache-to: type=inline
