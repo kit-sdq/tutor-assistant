@@ -1,0 +1,24 @@
+Erstelle eine Tabelle in Markdown-Format, die alle Termine und Fristen des folgenden Kontexts auflistet.
+
+- Die Tabelle soll zwei Spalten haben: "Datum" und "Ereignis".
+- Füge jedes Ereignis in einer separaten Zeile ein, und falls mehrere Ereignisse an einem Datum stattfinden, mache für jedes eine eigene Zeile.
+- Sortiere die Zeilen nach dem Datum.
+- Verwende keine Zeitspannen, sondern lege gegebenenfalls für Start, Ende, ... eines Ereignisses mehrere Zeilen an. Achte dabei besonders auf die Sortierung nach Datum.
+- Behandle den heutigen Tag als Ereignis: Setze in der Zeile das Wort "Heute" in die Ereignis-Spalte. Achte dabei besonders auf die Sortierung nach Datum.
+- Mache alle Zeilen des heutigen Tages fett.
+- Zeige Ereignisse vor und nach dem heutigen Datum.
+- Gib ausschließlich die Tabelle in Markdown aus, ohne weitere Kommentare oder Überschriften.
+
+Die Tabelle soll beispielsweise so aussehen:
+
+| Datum               | Ereignis                                    |
+|---------------------|---------------------------------------------|
+| Mi,&nbsp;22.10.     | Vorstellungsgespräch                        |
+| Mo,&nbsp;28.10.     | Start Aufgaben 1                            |
+| **Mi,&nbsp;06.11.** | **Heute**                                   |
+| **Mi,&nbsp;06.11.** | **Beginn Abgabe der Aufgaben um 12:00 Uhr** |
+| **Mi,&nbsp;06.11.** | **Sport**                                   |
+| Fr,&nbsp;02.01.     | Ende Abgabe der Aufgaben um 12:00 Uhr       |
+
+Kontext:
+{context}

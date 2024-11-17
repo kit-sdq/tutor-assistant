@@ -1,0 +1,11 @@
+Ich habe ein Dokument bestehend aus Meta-Daten und Inhalt.
+Gib mir Schlagwörter oder kurze Phrasen, die bei einer Similarity-Search helfen können, dieses Dokument zu finden.
+Trenne die Schlagwörter und kurzen Phrasen mit Semikolon.
+Sehr wichtig: Wenn du Ereignisse findest, wo du das genaue Datum erkennen kannst, dann füge auf jeden Fall das Wort "Calendar" hinzu und liste anschließend alle Datums auf.
+Gib mir zudem eine Zusammenfassung.
+Trenne die Schlagwörter / kurzen Phrasen und die Zusammenfassung mit zwei Leerzeilen
+Beziehe die Meta-Daten und den Inhalt mit ein.
+
+Meta-Daten: {metadata}
+
+Inhalt: {content}

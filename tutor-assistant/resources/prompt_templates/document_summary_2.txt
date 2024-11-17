@@ -1,0 +1,12 @@
+Ich habe ein Dokument bestehend aus Meta-Daten und Inhalt.
+Wenn du Ereignisse findest, wo du das genaue Datum erkennen kannst, gib "CalendarEntries:" zurück, gefolgt von einer Liste der erkannten Datums.
+Wenn du keine Ereignisse findest, gib nichts aus.
+
+Beispiel:
+CalendarEntries: 27.10.2024, 01.03.2025
+
+Beziehe die Meta-Daten und den Inhalt mit ein.
+
+Meta-Daten: {metadata}
+
+Inhalt: {content}

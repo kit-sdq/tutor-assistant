@@ -1,0 +1,7 @@
+Ich habe folgende Anfrage an dich gesendet:
+{prompt}
+
+Du hast folgendes geantwortet:
+{first_answer}
+
+Sag mir, warum die Antwort schlecht war, gib die Antwort nochmal unverändert zurück und dann noch eine verbesserte Antwort.

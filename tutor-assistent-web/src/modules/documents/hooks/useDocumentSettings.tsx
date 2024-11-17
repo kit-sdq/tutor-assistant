@@ -1,0 +1,84 @@
+import { apiBaseUrl } from '../../../app/base.ts'
+import { append, partition, remove } from '../../../lib/utils/array-utils.ts'
+import { useAuth } from '../../../app/auth/useAuth.ts'
+import { useEffect, useMemo, useState } from 'react'
+import { Resource, Setting } from '../model.ts'
+import { isNotPresent } from '../../../lib/utils/utils.ts'
+
+export function useDocumentSettings() {
+
+    const { getAuthHttp } = useAuth()
+
+    const [settings, setSettings] = useState<Setting[]>([])
+    const [resources, setResources] = useState<Resource[]>([])
+
+    const [mainSettings, valueSettings] =
+        useMemo(() => partition(setting => setting.type === 'MAIN', settings), [settings])
+
+    useEffect(() => {
+        loadSettings()
+        loadResources()
+    }, [])
+
+    async function loadSettings() {
+        const response = await getAuthHttp().get<Setting[]>(`${apiBaseUrl}/documents/settings`)
+        setSettings(response.data)
+    }
+
+    async function loadResources() {
+        const response = await getAuthHttp().get<Resource[]>(`${apiBaseUrl}/documents/resources`)
+        setResources(response.data)
+    }
+
+
+    async function addSetting(file: File) {
+        const response = await uploadFile<Setting>(file, 'settings')
+        if (isNotPresent(response)) return
+
+        loadSettings()
+    }
+
+    async function addResource(file: File) {
+        const response = await uploadFile<Resource>(file, 'resources')
+        if (isNotPresent(response)) return
+
+        setResources(prevState => append(response.data, prevState))
+    }
+
+    async function deleteSetting(id: string) {
+        await getAuthHttp().delete(`${apiBaseUrl}/documents/settings/${id}`)
+        setSettings(prevState => remove(id, prevState))
+    }
+
+    async function deleteResource(id: string) {
+        await getAuthHttp().delete(`${apiBaseUrl}/documents/resources/${id}`)
+        setResources(prevState => remove(id, prevState))
+    }
+
+
+    async function uploadFile<R>(file: File, pathEnding: string) {
+        const formData = new FormData()
+        formData.append('file', file)
+
+        try {
+            return await getAuthHttp().post<R>(`${apiBaseUrl}/documents/${pathEnding}`, formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            })
+        } catch (error) {
+            console.error('Error uploading file:', error)
+        }
+    }
+
+
+    return {
+        mainSettings,
+        valueSettings,
+        resources,
+        addSetting,
+        deleteSetting,
+        addResource,
+        deleteResource,
+    }
+}

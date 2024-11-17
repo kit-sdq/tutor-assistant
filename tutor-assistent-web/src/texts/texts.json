@@ -1,0 +1,110 @@
+{
+  "Calendar": {
+    "en": "Calendar",
+    "de": "Kalender"
+  },
+  "Chats": {
+    "en": "Chats",
+    "de": "Chats"
+  },
+  "Contexts": {
+    "en": "Contexts",
+    "de": "Kontexte"
+  },
+  "Delete": {
+    "en": "Delete",
+    "de": "Löschen"
+  },
+  "Documents": {
+    "en": "Documents",
+    "de": "Dokumente"
+  },
+  "Feedback": {
+    "en": "Feedback",
+    "de": "Feedback"
+  },
+  "File": {
+    "en": "File",
+    "de": "Datei"
+  },
+  "Files": {
+    "en": "Files",
+    "de": "Dateien"
+  },
+  "Index": {
+    "en": "Index",
+    "de": "Indizieren"
+  },
+  "Logout": {
+    "en": "Logout",
+    "de": "Abmelden"
+  },
+  "Main Settings": {
+    "en": "Main Settings",
+    "de": "Main Settings"
+  },
+  "Message": {
+    "en": "Message",
+    "de": "Nachricht"
+  },
+  "New Chat": {
+    "en": "New Chat",
+    "de": "Neuer Chat"
+  },
+  "Open": {
+    "en": "Open",
+    "de": "Öffnen"
+  },
+  "Sorry, an error occurred!": {
+    "en": "Sorry, an error occurred!",
+    "de": "Entschuldigung, es ist ein Fehler aufgetreten!"
+  },
+  "Resource": {
+    "en": "Resource",
+    "de": "Ressource"
+  },
+  "Resources": {
+    "en": "Resources",
+    "de": "Ressourcen"
+  },
+  "Send": {
+    "en": "Send",
+    "de": "Senden"
+  },
+  "Setting": {
+    "en": "Setting",
+    "de": "Einstellung"
+  },
+  "Summary": {
+    "en": "Summary",
+    "de": "Zusammenfassung"
+  },
+  "Thank You for your feedback!": {
+    "en": "Thank You for your feedback!",
+    "de": "Vielen Dank für dein Feedback!"
+  },
+  "Today": {
+    "en": "Today",
+    "de": "Heute"
+  },
+  "Uploads": {
+    "en": "Uploads",
+    "de": "Uploads"
+  },
+  "Users": {
+    "en": "Users",
+    "de": "Benutzer"
+  },
+  "Value Settings": {
+    "en": "Value Settings",
+    "de": "Value Settings"
+  },
+  "Website": {
+    "en": "Website",
+    "de": "Website"
+  },
+  "Websites": {
+    "en": "Websites",
+    "de": "Websites"
+  }
+}
