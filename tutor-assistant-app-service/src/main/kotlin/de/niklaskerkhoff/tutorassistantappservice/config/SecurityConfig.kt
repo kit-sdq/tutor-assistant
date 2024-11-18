@@ -21,7 +21,7 @@ class SecurityConfig {
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http {
             csrf { disable() }
-            cors { }
+//            cors { }
             authorizeRequests {
                 authorize(anyRequest, authenticated)
             }
@@ -37,22 +37,22 @@ class SecurityConfig {
         return http.build()
     }
 
-    @Bean
-    fun corsFilter(): CorsFilter {
-        val source = UrlBasedCorsConfigurationSource()
-        val config = CorsConfiguration()
-        config.allowCredentials = true
-        config.allowedOrigins = listOf(
-            "http://localhost:5173",
-            "http://localhost:5174",
-        )
-        config.allowedHeaders = listOf(
-            "Origin", "Content-Type", "Accept", "Authorization",
-            "Access-Control-Allow-Origin"
-        )
-        config.allowedMethods =
-            listOf("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
-        source.registerCorsConfiguration("/**", config)
-        return CorsFilter(source)
-    }
+//    @Bean
+//    fun corsFilter(): CorsFilter {
+//        val source = UrlBasedCorsConfigurationSource()
+//        val config = CorsConfiguration()
+//        config.allowCredentials = true
+//        config.allowedOrigins = listOf(
+//            "http://localhost:5173",
+//            "http://localhost:5174",
+//        )
+//        config.allowedHeaders = listOf(
+//            "Origin", "Content-Type", "Accept", "Authorization",
+//            "Access-Control-Allow-Origin"
+//        )
+//        config.allowedMethods =
+//            listOf("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS")
+//        source.registerCorsConfiguration("/**", config)
+//        return CorsFilter(source)
+//    }
 }
