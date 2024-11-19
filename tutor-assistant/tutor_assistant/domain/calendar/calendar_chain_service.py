@@ -39,13 +39,13 @@ class CalendarChainService:
     def _retriever(self, query: str) -> list[Document]:
         vector_store = self._config.vector_store_manager.load()
         try:
-            docs, scores = zip(*vector_store.similarity_search_with_score(query, k=100))
+            docs, scores = zip(*vector_store.similarity_search_with_score(query, k=1000))
         except:
             return []
         result = []
         doc: Document
         for doc, score in zip(docs, scores):
-            if 'CalendarEntries' in doc.metadata['summary']:
+            if 'isCalendar' in doc.metadata and doc.metadata['isCalendar']:
                 doc.metadata["score"] = score
                 result.append(doc)
 

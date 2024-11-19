@@ -12,19 +12,19 @@ router = APIRouter()
 @router.post('/documents/add')
 async def _add_document(request: Request):
     body: dict = await request.json()
-    check_request_body(body, ['title', 'originalKey', 'loaderType', 'loaderParams'])
+    check_request_body(body, ['title', 'originalKey', 'loaderType', 'loaderParams', 'isCalendar'])
     title: str = body['title']
     original_key: str = body['originalKey']
     loader_type: str = body['loaderType']
     loader_params: dict = body['loaderParams']
-    summarize_documents_count = body.get('summarizeDocumentsCount', -1)
+    is_calendar: bool = body['isCalendar']
 
     config.logger.info(
-        f'POST /documents/add: loader_type:{loader_type};loader_params:{loader_params.keys()};summarize_documents_count:{summarize_documents_count}')
+        f'POST /documents/add: title={title}; original_key={original_key}')
 
     loader = get_loader(loader_creators, title, loader_type, loader_params)
 
-    ids = DocumentService(config).add(loader, original_key, summarize_documents_count)
+    ids = DocumentService(config).add(loader, original_key, is_calendar)
 
     config.logger.info(f'Result: {ids}')
 

@@ -11,7 +11,8 @@ import jakarta.persistence.InheritanceType
 abstract class Document(
     open val title: String,
     open val loaderType: String,
-    open val collection: String?
+    open val collection: String?,
+    open val isCalendar: Boolean
 ) : AppEntity() {
     @ElementCollection
     open var tutorAssistantIds: List<String> = emptyList()

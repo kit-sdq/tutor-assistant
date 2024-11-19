@@ -29,7 +29,8 @@ class ApplierVisitor(
             fileDocument.title,
             fileDocument.fileStoreId.toString(),
             fileDocument.loaderType,
-            loaderParams
+            loaderParams,
+            fileDocument.isCalendar
         ).also {
             logAddedToTutorAssistant(fileDocument.title, it)
         }
@@ -62,7 +63,8 @@ class ApplierVisitor(
             websiteDocument.title,
             websiteDocument.loaderParams.url,
             websiteDocument.loaderType,
-            loaderParams
+            loaderParams,
+            websiteDocument.isCalendar
         ).also {
             logAddedToTutorAssistant(websiteDocument.title, it)
         }

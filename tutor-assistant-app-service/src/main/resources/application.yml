@@ -32,7 +32,7 @@ logging:
       max-file-size: 10MB
       max-history: 50
   level:
-    root: ${ROOT_LOG_LEVEL}
+    root: info
 
 
 app:

@@ -18,13 +18,15 @@ class TutorAssistantDocumentService(
         title: String,
         originalKey: String,
         loaderType: String,
-        loaderParams: Map<String, Any>
+        loaderParams: Map<String, Any>,
+        isCalendar: Boolean
     ): List<String> {
         val requestBody = mapOf(
             "title" to title,
             "originalKey" to originalKey,
             "loaderType" to loaderType,
             "loaderParams" to loaderParams,
+            "isCalendar" to isCalendar
         )
 
         return webClient.post()

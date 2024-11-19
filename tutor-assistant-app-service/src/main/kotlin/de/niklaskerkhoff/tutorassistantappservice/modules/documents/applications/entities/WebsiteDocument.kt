@@ -8,8 +8,9 @@ class WebsiteDocument(
     title: String,
     loaderType: String,
     collection: String?,
+    isCalendar: Boolean,
     val loaderParams: LoaderParams,
-) : Document(title, loaderType, collection) {
+) : Document(title, loaderType, collection, isCalendar) {
     override fun accept(visitor: DocumentVisitor) {
         visitor.visit(this)
     }

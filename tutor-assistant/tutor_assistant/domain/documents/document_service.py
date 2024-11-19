@@ -13,17 +13,15 @@ class DocumentService:
     def __init__(self, config: DomainConfig):
         self._config = config
 
-    def add(self, loader: BaseLoader, original_key: str, summarize_documents_count: int) -> list[str]:
+    def add(self, loader: BaseLoader, original_key: str, is_calendar: bool) -> list[str]:
         documents = loader.load()
         ids: list[str] = []
         for i, doc in enumerate(documents):
             doc.id = str(uuid.uuid4())
             doc.metadata['id'] = doc.id
             doc.metadata['originalKey'] = original_key
+            doc.metadata['isCalendar'] = is_calendar
             ids.append(doc.id)
-
-        # if len(documents) <= summarize_documents_count:
-        #     self._summarize_documents(documents)
 
         meta_docs = self._handle_meta_docs(documents)
 

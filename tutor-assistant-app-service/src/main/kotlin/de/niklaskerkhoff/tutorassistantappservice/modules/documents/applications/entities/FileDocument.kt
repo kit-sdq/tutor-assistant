@@ -8,9 +8,10 @@ class FileDocument(
     title: String,
     loaderType: String,
     collection: String?,
+    isCalendar: Boolean,
     val fileStoreId: UUID,
     val fileStoreUrl: String,
-) : Document(title, loaderType, collection) {
+) : Document(title, loaderType, collection, isCalendar) {
     override fun accept(visitor: DocumentVisitor) {
         visitor.visit(this)
     }

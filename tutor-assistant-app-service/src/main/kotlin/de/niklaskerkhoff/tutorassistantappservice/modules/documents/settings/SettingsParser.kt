@@ -49,7 +49,7 @@ class SettingsParser(
 
         return when {
             json.has("elements") -> parseElements(json["elements"], collection)
-            json.has("elementsBuilder") -> parseElementsBuilder(json["elementsBuilder"], collection, getValues(json))
+            json.has("elementsBuilder") -> parseElementsBuilder(json["elementsBuilder"], collection, json.getValues())
             else -> throw SettingsParserException("Failed parsing collection")
         }
     }
@@ -91,6 +91,7 @@ class SettingsParser(
             json["title"].stringWithValueOrThrow(value),
             json["loaderType"].stringWithValueOrThrow(value),
             collection,
+            json["isCalendar"].booleanOrFalse(),
             fileStoreId,
             fileStoreUrl
         )
@@ -103,6 +104,7 @@ class SettingsParser(
             json["title"].stringWithValueOrThrow(value),
             json["loaderType"].stringWithValueOrThrow(value),
             collection,
+            json["isCalendar"].booleanOrFalse(),
             parseWebsiteLoaderParams(json["loaderParams"], value)
         )
     }
@@ -117,37 +119,48 @@ class SettingsParser(
         )
     }
 
+    private fun JsonNode?.requireNotNull() {
+        if (this == null) throw SettingsParserException("Node is null")
+    }
+
     private fun JsonNode.requireObject() {
-        if (!isObject) throw SettingsParserException("Not an object")
+        requireNotNull()
+        if (!isObject) throw SettingsParserException("Node is not an object")
     }
 
     private fun JsonNode.requireArray() {
-        if (!isArray) throw SettingsParserException("Not an array")
+        requireNotNull()
+        if (!isArray) throw SettingsParserException("Node is not an array")
     }
 
     private fun JsonNode.requireObjectKeys(vararg keys: String) {
-        keys.forEach { if (!has(it)) throw SettingsParserException("Key $it not found") }
+        requireNotNull()
+        keys.forEach { if (!has(it)) throw SettingsParserException("Key $it not found in node") }
     }
 
     private fun JsonNode.stringOrThrow(): String {
-        if (!isTextual) throw SettingsParserException("Not a string")
+        requireNotNull()
+        if (!isTextual) throw SettingsParserException("Node is not a string")
         return asText()
     }
 
     private fun JsonNode.intOrThrow(): Int {
-        if (!isInt) throw SettingsParserException("Not an int")
+        requireNotNull()
+        if (!isInt) throw SettingsParserException("Node is not an int")
         return asInt()
     }
 
-    private fun getValues(json: JsonNode): List<String> {
-        json.requireObjectKeys("values")
+    private fun JsonNode.getValues(): List<String> {
+        requireNotNull()
+        requireObjectKeys("values")
 
-        val key = json["values"].stringOrThrow()
+        val key = this["values"].stringOrThrow()
 
         return allValues[key] ?: throw SettingsParserException("Values for key $key not found")
     }
 
     private fun JsonNode.getUrlFromFilename(value: String?): Pair<UUID, String> {
+        requireNotNull()
         val filename = this["filename"].stringWithValueOrThrow(value)
         val idAndUrl = fileStoreIdsAndUrls[filename] ?: throw SettingsParserException("File $filename does not exist")
         val id = idAndUrl.first ?: throw SettingsParserException("File store id must not be null")
@@ -155,6 +168,7 @@ class SettingsParser(
     }
 
     private fun JsonNode.stringWithValueOrThrow(value: String?): String {
+        requireNotNull()
         val string = stringOrThrow()
         if (value == null) return string
 
@@ -167,5 +181,9 @@ class SettingsParser(
             strategy(value)
         }
     }
-}
 
+    private fun JsonNode?.booleanOrFalse(): Boolean {
+        if (this == null) return false
+        return booleanValue()
+    }
+}
