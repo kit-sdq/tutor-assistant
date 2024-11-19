@@ -3,10 +3,11 @@ services:
     image: nginx:1.27
     container_name: tutor-assistant-nginx-proxy
     restart: always
-    ports:
-      - "80:80"
     volumes:
       - ./tutor-assistant-nginx-proxy.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - tutor-assistant
+      - reverse-proxy
     depends_on:
       - tutor-assistant-web
       - tutor-assistant-app-service
@@ -20,11 +21,15 @@ services:
       - env/.tutor-assistant.env
     volumes:
       - ./data/tutor-assistant-data:/var/lib/tutor-assistant/data
+    networks:
+      - tutor-assistant
 
   tutor-assistant-web:
     image: zaeunepyrite01/tutor-assistant-web:latest
     container_name: tutor-assistant-web
     restart: always
+    networks:
+      - tutor-assistant
 
   tutor-assistant-app-service:
     image: zaeunepyrite01/tutor-assistant-app-service:latest
@@ -36,8 +41,8 @@ services:
       - env/.tutor-assistant-app-service.env
     volumes:
       - ./data/tutor-assistant-app-service-logs:/var/log/tutor-assistant-app-service-logs
-    extra_hosts:
-      - myhost:host-gateway
+    networks:
+      - tutor-assistant
 
   tutor-assistant-app-service-postgres:
     image: postgres:16.4-alpine3.20
@@ -47,6 +52,8 @@ services:
       - env/.tutor-assistant-app-service-postgres.env
     volumes:
       - ./data/tutor-assistant-app-service-postgres-data:/var/lib/postgresql/data
+    networks:
+      - tutor-assistant
 
   tutor-assistant-keycloak:
     image: quay.io/keycloak/keycloak:25.0.4
@@ -57,6 +64,8 @@ services:
       - tutor-assistant-keycloak-postgres
     env_file:
       - env/.tutor-assistant-keycloak.env
+    networks:
+      - tutor-assistant
 
   tutor-assistant-keycloak-postgres:
     image: postgres:16.4-alpine3.20
@@ -66,17 +75,29 @@ services:
       - env/.tutor-assistant-keycloak-postgres.env
     volumes:
       - ./data/tutor-assistant-keycloak-postgres-data:/var/lib/postgresql/data
+    networks:
+      - tutor-assistant
 
   tutor-assistant-seaweedfs-master:
     image: chrislusf/seaweedfs
     container_name: tutor-assistant-seaweedfs-master
     restart: always
     command: 'master'
+    networks:
+      - tutor-assistant
 
   tutor-assistant-seaweedfs-volume:
     image: chrislusf/seaweedfs
     container_name: tutor-assistant-seaweedfs-volume
     restart: always
-    command: 'volume -mserver tutor-assistant-seaweedfs-master:9333 -dir /var/lib/seaweedfs/data'
+    command: 'volume -mserver tutor-assistant-seaweedfs-master:9333 -dir /var/lib/seaweedfs/data -publicUrl  tutor-assistant-seaweedfs-volume:8080'
     volumes:
       - ./data/tutor-assistant-seaweedfs-volume-data:/var/lib/seaweedfs/data
+    networks:
+      - tutor-assistant
+
+networks:
+  reverse-proxy:
+    external: true
+  tutor-assistant:
+    external: false
