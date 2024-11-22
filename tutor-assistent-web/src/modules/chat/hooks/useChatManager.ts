@@ -1,13 +1,14 @@
 import { Chat as ChatModel, Chat } from '../chat-model.ts'
 import { apiBaseUrl } from '../../../app/base.ts'
 import { useAuth } from '../../../app/auth/useAuth.ts'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo } from 'react'
 import { remove } from '../../../lib/utils/array-utils.ts'
 import { isPresent } from '../../../lib/utils/utils.ts'
+import { useChatContext } from '../useChatContext.ts'
 
 export function useChatManager() {
 
-    const [chats, setChats] = useState<Chat[]>([])
+    const { chats, setChats } = useChatContext()
 
     const summarizedChats = useMemo(() => chats.filter(it => isPresent(it.summary)), [chats])
 

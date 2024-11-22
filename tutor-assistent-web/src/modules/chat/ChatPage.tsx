@@ -3,7 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { isNotPresent, isPresent } from '../../lib/utils/utils.ts'
 import { useChatManager } from './hooks/useChatManager.ts'
 import { useTranslation } from 'react-i18next'
-import { useChat } from './hooks/useChat.ts'
+import { useSelectedChat } from './hooks/useSelectedChat.ts'
 import { useAsyncActionTrigger } from './hooks/useAsyncActionTrigger.ts'
 import { MainContent, Row, VStack } from '../../lib/components/flex-layout.tsx'
 import { Divider } from '@mui/joy'
@@ -20,11 +20,12 @@ export function ChatPage() {
 
     const chatId = useParams().chatId
     const { createChat } = useChatManager()
-    const { chat, sendMessage, isLoading } = useChat(chatId)
+    const { selectedChat, sendMessage, isLoading } = useSelectedChat(chatId)
+    console.log('selectedChat', selectedChat)
     const [isSending, sendMessageAction] = useAsyncActionTrigger(
         handleSend,
-        () => isPresent(chat) && chat.id === chatId,
-        [chat?.id],
+        () => isPresent(selectedChat) && selectedChat.id === chatId,
+        [selectedChat?.id],
     )
 
 
@@ -63,7 +64,7 @@ export function ChatPage() {
             <MainContent>
                 {
                     isPresent(chatId)
-                        ? <ChatDetails chat={chat} />
+                        ? <ChatDetails />
                         : <ChatOverview />
                 }
             </MainContent>

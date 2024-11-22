@@ -79,9 +79,9 @@
     "en": "Resources",
     "de": "Ressourcen"
   },
-  "Sources": {
-    "en": "Sources",
-    "de": "Quellen"
+  "Select a message": {
+    "en": "Select a message",
+    "de": "Wähle eine Nachricht aus"
   },
   "Send": {
     "en": "Send",
@@ -90,6 +90,10 @@
   "Setting": {
     "en": "Setting",
     "de": "Einstellung"
+  },
+  "Sources": {
+    "en": "Sources",
+    "de": "Quellen"
   },
   "Summary": {
     "en": "Summary",

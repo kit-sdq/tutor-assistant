@@ -23,7 +23,13 @@ interface Props {
 export function ChatMessageItem({ message, onMessageClick, selectedMessageId }: Props) {
     const { t } = useTranslation()
 
-    const { feedback, setContent, loadFeedback, updateFeedbackRating, updateFeedbackContent } = useChatMessageFeedback()
+    const {
+        selectedMessageFeedback,
+        setContent,
+        loadFeedback,
+        updateFeedbackRating,
+        updateFeedbackContent,
+    } = useChatMessageFeedback()
     const [showThankYou, setShowThankYou] = useState(false)
 
     useEffect(() => {
@@ -36,7 +42,7 @@ export function ChatMessageItem({ message, onMessageClick, selectedMessageId }: 
     async function handleSendFeedback() {
         if (isNotPresent(selectedMessageId)) return
 
-        await updateFeedbackContent(selectedMessageId, feedback?.content ?? '')
+        await updateFeedbackContent(selectedMessageId, selectedMessageFeedback?.content ?? '')
         setShowThankYou(true)
     }
 
@@ -67,7 +73,7 @@ export function ChatMessageItem({ message, onMessageClick, selectedMessageId }: 
                                 {isSelected(message.id) && (
                                     <SubmitTextarea
                                         onCtrlEnter={handleSendFeedback}
-                                        value={feedback?.content ?? ''}
+                                        value={selectedMessageFeedback?.content ?? ''}
                                         placeholder={t('Feedback')}
                                         onChange={e => {
                                             setContent(e.target.value)
@@ -76,7 +82,7 @@ export function ChatMessageItem({ message, onMessageClick, selectedMessageId }: 
                                         startDecorator={
                                             <StarRater
                                                 max={5}
-                                                rating={feedback?.rating ?? 0}
+                                                rating={selectedMessageFeedback?.rating ?? 0}
                                                 onSelect={rating => updateFeedbackRating(selectedMessageId, rating)}
                                             />
                                         }

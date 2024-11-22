@@ -3,6 +3,7 @@ import { ChatPage } from '../../modules/chat/ChatPage.tsx'
 import { Authenticated } from '../auth/Authenticated.tsx'
 import { DocumentsPage } from '../../modules/documents/DocumentsPage.tsx'
 import { HelperPage } from '../../modules/helper/HelperPage.tsx'
+import { ChatProvider } from '../../modules/chat/ChatProvider.tsx'
 
 interface Props {
 
@@ -18,7 +19,9 @@ export function Routing({}: Props) {
             <Route
                 path='/chats/:chatId?' element={
                 <Authenticated>
-                    <ChatPage />
+                    <ChatProvider>
+                        <ChatPage />
+                    </ChatProvider>
                 </Authenticated>
             }
             />

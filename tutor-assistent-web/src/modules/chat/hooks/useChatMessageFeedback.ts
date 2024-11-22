@@ -1,18 +1,18 @@
-import { useState } from 'react'
 import { useAuth } from '../../../app/auth/useAuth.ts'
 import { apiBaseUrl } from '../../../app/base.ts'
 import { ChatMessageFeedback } from '../chat-model.ts'
 import { isNotPresent } from '../../../lib/utils/utils.ts'
+import { useChatContext } from '../useChatContext.ts'
 
 export function useChatMessageFeedback() {
     const { getAuthHttp } = useAuth()
 
-    const [feedback, setFeedback] = useState<ChatMessageFeedback>()
+    const { selectedMessageFeedback, setSelectedMessageFeedback } = useChatContext()
 
     async function loadFeedback(messageId: string) {
-        setFeedback(undefined)
+        setSelectedMessageFeedback(undefined)
         const response = await getAuthHttp().get<ChatMessageFeedback>(`${apiBaseUrl}/chats/messages/${messageId}`)
-        setFeedback(response.data)
+        setSelectedMessageFeedback(response.data)
     }
 
     async function updateFeedbackRating(messageId: string | undefined, rating: number) {
@@ -31,16 +31,16 @@ export function useChatMessageFeedback() {
     }
 
     function setRating(rating: number) {
-        setFeedback(prevState => isNotPresent(prevState) ? undefined : ({ ...prevState, rating }))
+        setSelectedMessageFeedback(prevState => isNotPresent(prevState) ? undefined : ({ ...prevState, rating }))
     }
 
     function setContent(content: string) {
-        setFeedback(prevState => isNotPresent(prevState) ? undefined : ({ ...prevState, content }))
+        setSelectedMessageFeedback(prevState => isNotPresent(prevState) ? undefined : ({ ...prevState, content }))
     }
 
 
     return {
-        feedback,
+        selectedMessageFeedback,
         setContent,
         loadFeedback,
         updateFeedbackRating,

@@ -6,8 +6,7 @@ import { Header } from '../../../../common/components/Header.tsx'
 import { useTranslation } from 'react-i18next'
 import { Scroller } from '../../../../lib/components/Scroller.tsx'
 import { MainContent, Spacer, VStack } from '../../../../lib/components/flex-layout.tsx'
-import { Box, Button, Card, CardActions, CardContent, IconButton, Typography } from '@mui/joy'
-import { GradingOutlined, SummarizeOutlined } from '@mui/icons-material'
+import { Box, Button, Card, CardActions, CardContent, ToggleButtonGroup, Typography } from '@mui/joy'
 import { empty } from '../../../../lib/utils/array-utils.ts'
 import { StyledMarkdown } from '../../../../common/components/StyledMarkdown.tsx'
 import { useOpenContexts } from '../../hooks/useOpenContexts.ts'
@@ -20,55 +19,56 @@ interface Props {
 }
 
 export function ChatAdditionalInfo({ chat, selectedMessageId }: Props) {
-    const [additionalInfo, setAdditionalInfo] = useState<'summary' | 'contexts' | undefined>('summary')
+    const { t } = useTranslation()
+    const [additionalInfo, setAdditionalInfo] = useState<'summary' | 'contexts' | null>('contexts')
     const contexts = useMemo(() => {
         if (isNotPresent(selectedMessageId) && empty(chat.messages)) return undefined
         return chat.messages.find(message => message.id === selectedMessageId)?.contexts
     }, [selectedMessageId])
 
+    function handleTabChange(_: unknown, newValue: 'summary' | 'contexts' | null) {
+        if (isPresent(newValue)) {
+            setAdditionalInfo(newValue)
+        }
+    }
+
     if (isNotPresent(additionalInfo)) return <></>
 
-    return (
-        <Bar className='right'>
-            {
-                additionalInfo === 'summary' && (
-                    <Summary
-                        summary={chat.summary}
-                        onContextsClicked={() => setAdditionalInfo('contexts')}
-                    />
-                )
+    return <Bar className='right'>
+        <Header
+            title={
+                <ToggleButtonGroup
+                    value={additionalInfo}
+                    onChange={handleTabChange}
+                    size='sm'
+                >
+                    <Button value='contexts'>{t('Sources')} ({contexts?.length ?? 0})</Button>
+                    <Button value='summary'>{t('Summary')}</Button>
+                </ToggleButtonGroup>
             }
+        />
+        {
+            additionalInfo === 'summary' && <Summary
+                summary={chat.summary}
+            />
+        }
 
-            {
-                additionalInfo === 'contexts' && (
-                    <Contexts
-                        contexts={contexts}
-                        onSummaryClicked={() => setAdditionalInfo('summary')}
-                    />
-                )
-            }
-        </Bar>
-    )
+        {
+            additionalInfo === 'contexts' && <Contexts
+                contexts={contexts}
+            />
+        }
+    </Bar>
 }
 
 interface SummaryProps {
     summary: ChatSummary | undefined
-    onContextsClicked: () => void
 }
 
-function Summary({ summary, onContextsClicked }: SummaryProps) {
-    const { t } = useTranslation()
+function Summary({ summary }: SummaryProps) {
 
     return (
         <>
-            <Header
-                title={t('Summary')}
-                rightNode={
-                    <IconButton color='primary' onClick={onContextsClicked}>
-                        <GradingOutlined />
-                    </IconButton>
-                }
-            />
             <MainContent>
                 <Scroller padding={1}>
                     {
@@ -89,10 +89,9 @@ function Summary({ summary, onContextsClicked }: SummaryProps) {
 
 interface ContextsProps {
     contexts: ChatMessageContext[] | undefined
-    onSummaryClicked: () => void
 }
 
-function Contexts({ contexts, onSummaryClicked }: ContextsProps) {
+function Contexts({ contexts }: ContextsProps) {
     const { t } = useTranslation()
 
     const { openContexts } = useOpenContexts()
@@ -104,16 +103,14 @@ function Contexts({ contexts, onSummaryClicked }: ContextsProps) {
         return isPresent(context.title) ? `${context.title}${pageOutput}` : ''
     }
 
+    if (contexts.length === 0) return (
+        <VStack justifyContent='center' alignItems='center'>
+            <Typography>{t('Select a message')}</Typography>
+        </VStack>
+    )
+
     return (
         <>
-            <Header
-                title={`${t('Sources')} (${contexts?.length ?? 0})`}
-                rightNode={
-                    <IconButton color='primary' onClick={onSummaryClicked}>
-                        <SummarizeOutlined />
-                    </IconButton>
-                }
-            />
             <MainContent>
                 <Scroller padding={1}>
                     <VStack gap={1}>

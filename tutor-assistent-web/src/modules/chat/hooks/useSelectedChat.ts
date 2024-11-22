@@ -6,13 +6,14 @@ import { useAuth } from '../../../app/auth/useAuth.ts'
 import { SSE, SSEvent } from 'sse.js'
 import { useKeycloak } from '@react-keycloak/web'
 import { isNotPresent } from '../../../lib/utils/utils.ts'
+import { useChatContext } from '../useChatContext.ts'
 
-export function useChat(chatId: string | undefined) {
+export function useSelectedChat(chatId: string | undefined) {
     const eventStreamEnd = '=====END====='
     const messageEnd = '=====MESSAGE_END====='
 
 
-    const [chat, setChat] = useState<Chat>()
+    const { selectedChat, setSelectedChat } = useChatContext()
 
     const [isLoading, setIsLoading] = useState(false)
     const sseRef = useRef<SSE>()
@@ -20,7 +21,10 @@ export function useChat(chatId: string | undefined) {
 
     const { keycloak } = useKeycloak()
 
+    console.log('setSelectedChat', setSelectedChat)
+    console.log(chatId)
     useEffect(() => {
+        console.log('loadChat')
         loadChat()
         return () => {
             cleanupStreaming()
@@ -30,23 +34,24 @@ export function useChat(chatId: string | undefined) {
 
     async function loadChat() {
         if (isNotPresent(chatId)) {
-            setChat(undefined)
+            setSelectedChat(undefined)
             return
         }
         setIsLoading(true)
         const result = await getAuthHttp().get<Chat>(`${apiBaseUrl}/chats/${chatId}`)
-        setChat(result.data)
+        console.log('result.data', result.data)
+        setSelectedChat(result.data)
         setIsLoading(false)
     }
 
     async function sendMessage(message: string) {
 
         if (isLoading) return
-        if (isNotPresent(chat)) return
+        if (isNotPresent(selectedChat)) return
 
         sseRef.current?.close()
 
-        setChat(prevState => {
+        setSelectedChat(prevState => {
 
             if (isNotPresent(prevState)) return
 
@@ -59,7 +64,7 @@ export function useChat(chatId: string | undefined) {
             }
         })
 
-        const url = `${apiBaseUrl}/chats/${chat.id}/messages`
+        const url = `${apiBaseUrl}/chats/${selectedChat.id}/messages`
 
         const sse = new SSE(url, {
             headers: {
@@ -99,7 +104,7 @@ export function useChat(chatId: string | undefined) {
     function processData(data: string) {
         const token = data.substring(1, data.length - 1)
 
-        setChat(prevState => {
+        setSelectedChat(prevState => {
             if (isNotPresent(prevState)) return
 
             const messages = [...prevState.messages]
@@ -126,7 +131,7 @@ export function useChat(chatId: string | undefined) {
     }
 
     return {
-        chat,
+        selectedChat,
         sendMessage,
         isLoading,
     }

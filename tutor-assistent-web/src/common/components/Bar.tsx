@@ -1,7 +1,7 @@
 import { styled } from '@mui/joy'
 import { VStack } from '../../lib/components/flex-layout.tsx'
 
-const barWidth = '420px'
+const barWidth = '380px'
 export const Bar = styled(VStack)`
     min-width: ${barWidth};
     width: ${barWidth};
