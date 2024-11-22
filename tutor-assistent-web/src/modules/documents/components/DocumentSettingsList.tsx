@@ -8,6 +8,7 @@ import { FileButton } from './FileButton.tsx'
 import { Bar } from '../../../common/components/Bar.tsx'
 import { Header } from '../../../common/components/Header.tsx'
 import React from 'react'
+import { useOpenContexts } from '../../chat/hooks/useOpenContexts.ts'
 
 interface Props {
     canManage: boolean
@@ -26,6 +27,9 @@ export function DocumentSettingsList({ canManage }: Props) {
     } = useDocumentSettings()
 
     const { t } = useTranslation()
+
+    const { openContexts } = useOpenContexts()
+
     return (
         <Bar>
             <Header title={t('Uploads')} />
@@ -33,7 +37,7 @@ export function DocumentSettingsList({ canManage }: Props) {
                 <Scroller padding={1}>
                     <VStack gap={1}>
 
-                        <Row gap={1}>
+                        <Row alignItems='center' gap={1}>
                             <Spacer />
                             <FileButton
                                 addFile={addSetting}
@@ -68,6 +72,7 @@ export function DocumentSettingsList({ canManage }: Props) {
                             title={t('Resources')}
                             items={resources}
                             getLabel={resource => resource.displayName}
+                            onClick={resource => openContexts(resource.id)}
                             onDelete={resource => deleteResource(resource.id)}
                             canManage={canManage}
                         />

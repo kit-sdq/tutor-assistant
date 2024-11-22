@@ -44,7 +44,7 @@ export function CalendarBar({}: Props) {
                 </Scroller>
             </MainContent>
             <StyledDivider />
-            <Row padding={1}>
+            <Row alignItems='center' padding={1}>
                 <Button
                     color='neutral'
                     variant='outlined'

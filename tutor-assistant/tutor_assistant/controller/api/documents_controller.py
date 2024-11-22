@@ -24,7 +24,7 @@ async def _add_document(request: Request):
 
     loader = get_loader(loader_creators, title, loader_type, loader_params)
 
-    ids = DocumentService(config).add(loader, original_key, is_calendar)
+    ids = DocumentService(config).add(loader, title, original_key, is_calendar)
 
     config.logger.info(f'Result: {ids}')
 

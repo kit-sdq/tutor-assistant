@@ -1,4 +1,5 @@
 import json
+from typing import Iterator
 
 from langchain_core.documents import Document
 from langchain_core.runnables import Runnable
@@ -7,7 +8,11 @@ from tutor_assistant.controller.utils.event_stream_utils import event_end, event
 
 
 def stream_chain(chain: Runnable, answer_key='answer', context_key='context'):
-    for item in chain.stream({}):
+    yield from stream_response(chain.stream({}), answer_key, context_key)
+
+
+def stream_response(response: Iterator, answer_key='answer', context_key='context'):
+    for item in response:
         if context_key in item:
             yield from _handle_context(item[context_key], context_key)
         elif answer_key in item:

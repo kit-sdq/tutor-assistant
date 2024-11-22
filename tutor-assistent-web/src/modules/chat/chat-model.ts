@@ -18,8 +18,12 @@ export interface ChatSummary {
 }
 
 export interface ChatMessageContext {
-    content: string
+    title?: string
     originalKey?: string
+    heading?: string
+    page?: number
+    content?: string
+    score?: number
 }
 
 export interface ChatMessageFeedback {

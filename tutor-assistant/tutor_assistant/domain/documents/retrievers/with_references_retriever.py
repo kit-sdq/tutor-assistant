@@ -3,54 +3,47 @@ from uuid import uuid4
 
 from langchain_core.callbacks import CallbackManagerForRetrieverRun
 from langchain_core.documents import Document
-from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.retrievers import BaseRetriever
 
 from tutor_assistant.domain.domain_config import DomainConfig
 from tutor_assistant.utils.list_utils import distinct_by
 
 
-class HybridRetriever(BaseRetriever):
+class WithReferencesRetriever(BaseRetriever):
+
     def __init__(self, config: DomainConfig, *args: Any, **kwargs: Any):
         super().__init__(*args, **kwargs)
-        self._chat_model = config.chat_model
+
         self._vector_store = config.vector_store_manager.load()
-        self._multiple_prompts = (
-            config.resources)['prompt_templates']['hybrid_retriever']['multiple_retriever_queries.txt']
+        self._logger = config.logger
 
     def _get_relevant_documents(
-            self, messages: list[tuple[str, str]], *, run_manager: CallbackManagerForRetrieverRun
-    ) -> list[Document]:
-        queries = self._get_queries(messages)
+            self, queries: list[str], *, run_manager: CallbackManagerForRetrieverRun) -> list[Document]:
+
         docs: list[Document] = []
         for query in queries:
+            query = query.strip()
+            self._logger.info(f'Searching for "{query}"')
             queried_docs = self._search_with_score(query.strip())
             docs.extend(queried_docs)
-            referenced_docs = self._get_referenced_by(query, docs)
+            self._logger.info(f'Retrieved {len(queried_docs)} documents')
+            referenced_docs = self._get_referenced_docs(query, queried_docs)
+            self._logger.info(f'Retrieved {len(referenced_docs)} referenced documents')
             docs.extend(referenced_docs)
 
+        self._logger.info(f'Retrieved {len(docs)} documents in total')
         distinct = distinct_by(self._id_or_random, docs)
-        filtered = list(filter(lambda x: 'id' in x.metadata, distinct))
-        return distinct
-
-    def _get_queries(self, messages: list[tuple[str, str]]) -> list[str]:
-        chain = self._get_chat_prompt(messages) | self._chat_model
-        content = chain.invoke({}).content
-        print('content', content)
-        queries = content.split(';')
-
-        return queries
-
-    def _get_chat_prompt(self, messages: list[tuple[str, str]]) -> ChatPromptTemplate:
-        prompt_messages = messages + [('system', self._multiple_prompts)]
-        return ChatPromptTemplate.from_messages(prompt_messages)
+        self._logger.info(f'Retrieved {len(distinct)} distinct documents')
+        real_docs = list(filter(lambda x: 'id' in x.metadata, distinct))
+        self._logger.info(f'Retrieved {len(real_docs)} real documents')
+        return real_docs
 
     def _search_with_score(self, query: str) -> list[Document]:
         try:
             docs, scores = zip(
                 *self._vector_store.similarity_search_with_score(
                     query,
-                    k=5
+                    k=8
                 )
             )
         except Exception as e:
@@ -61,12 +54,12 @@ class HybridRetriever(BaseRetriever):
         for doc, np_score in zip(docs, scores):
             score = float(np_score)
             doc.metadata['score'] = score
-            if np_score < 5:
+            if np_score < 1.1:
                 result.append(doc)
 
         return result
 
-    def _get_referenced_by(self, query: str, docs: list[Document]) -> list[Document]:
+    def _get_referenced_docs(self, query: str, docs: list[Document]) -> list[Document]:
         referenced_docs: list[Document] = []
         for doc in docs:
             if 'references' in doc.metadata:
@@ -81,6 +74,12 @@ class HybridRetriever(BaseRetriever):
                     lambda d: (d.metadata['id'] in ids) if 'id' in d.metadata else False,
                     queried_docs
                 ))
+
+                for filtered_doc in filtered_docs:
+                    if 'score' in filtered_doc.metadata:
+                        print('has already a score')
+                    filtered_doc.metadata['score'] = doc.metadata['score']
+
                 referenced_docs.extend(filtered_docs)
         return referenced_docs
 

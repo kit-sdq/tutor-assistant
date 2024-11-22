@@ -7,7 +7,7 @@ def get_logger() -> logging.Logger:
     logger = logging.getLogger('tutor-assistant')
     logger.setLevel(logging.DEBUG)
 
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(filename)s:%(lineno)d - %(message)s')
 
     console_handler = logging.StreamHandler()
     console_handler.setLevel(logging.DEBUG)

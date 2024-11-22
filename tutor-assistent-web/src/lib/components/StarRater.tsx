@@ -22,7 +22,7 @@ export function StarRater({ max, rating, onSelect }: Props) {
     }
 
     return (
-        <Row>
+        <Row alignItems='center'>
             {range(0, max).map((_, index) => (
                 <RatingStar
                     key={index}

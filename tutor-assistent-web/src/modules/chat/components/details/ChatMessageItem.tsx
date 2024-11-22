@@ -1,4 +1,4 @@
-import { Button, styled, Textarea, Typography } from '@mui/joy'
+import { styled, Typography } from '@mui/joy'
 import { ChatMessage } from '../../chat-model.ts'
 import rehypeHighlight from 'rehype-highlight'
 import React, { useEffect, useState } from 'react'
@@ -6,10 +6,11 @@ import { isNotPresent, isPresent } from '../../../../lib/utils/utils.ts'
 import classNames from 'classnames'
 import remarkGfm from 'remark-gfm'
 import { StyledMarkdown } from '../../../../common/components/StyledMarkdown.tsx'
-import { Row, Spacer } from '../../../../lib/components/flex-layout.tsx'
 import { StarRater } from '../../../../lib/components/StarRater.tsx'
 import { useChatMessageFeedback } from '../../hooks/useChatMessageFeedback.ts'
 import { useTranslation } from 'react-i18next'
+import { SubmitTextarea } from '../../../../common/components/SubmitTextarea.tsx'
+import { Multiline } from '../../../../lib/components/Multiline.tsx'
 
 
 interface Props {
@@ -64,7 +65,8 @@ export function ChatMessageItem({ message, onMessageClick, selectedMessageId }: 
                                     {message.content}
                                 </StyledMarkdown>
                                 {isSelected(message.id) && (
-                                    <Textarea
+                                    <SubmitTextarea
+                                        onCtrlEnter={handleSendFeedback}
                                         value={feedback?.content ?? ''}
                                         placeholder={t('Feedback')}
                                         onChange={e => {
@@ -78,25 +80,20 @@ export function ChatMessageItem({ message, onMessageClick, selectedMessageId }: 
                                                 onSelect={rating => updateFeedbackRating(selectedMessageId, rating)}
                                             />
                                         }
-                                        endDecorator={
-                                            <Row>
-                                                {showThankYou && (
-                                                    <Typography level='title-lg' color='primary'>
-                                                        {t('Thank You for your feedback!')}
-                                                    </Typography>
-                                                )}
-                                                <Spacer />
-                                                <Button onClick={() => handleSendFeedback()}>
-                                                    {t('Send')}
-                                                </Button>
-                                            </Row>
-                                        }
                                         maxRows={3}
+                                        additionEndDecorator={
+                                            showThankYou && (
+                                                <Typography level='title-lg' color='primary'>
+                                                    {t('Thank You for your feedback!')}
+                                                </Typography>
+                                            )
+                                        }
                                     />
                                 )}
                             </>
                         )
-                        : message.content
+                        : <Multiline text={message.content} />
+
                 }
             </Content>
         </Wrapper>

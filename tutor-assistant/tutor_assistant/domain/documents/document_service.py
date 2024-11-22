@@ -13,17 +13,18 @@ class DocumentService:
     def __init__(self, config: DomainConfig):
         self._config = config
 
-    def add(self, loader: BaseLoader, original_key: str, is_calendar: bool) -> list[str]:
+    def add(self, loader: BaseLoader, title: str, original_key: str, is_calendar: bool) -> list[str]:
         documents = loader.load()
         ids: list[str] = []
         for i, doc in enumerate(documents):
             doc.id = str(uuid.uuid4())
             doc.metadata['id'] = doc.id
+            doc.metadata['title'] = title
             doc.metadata['originalKey'] = original_key
             doc.metadata['isCalendar'] = is_calendar
             ids.append(doc.id)
 
-        meta_docs = self._handle_meta_docs(documents)
+        meta_docs = self._get_meta_docs(documents)
 
         store = self._config.vector_store_manager.load()
         store_ids = store.add_documents(documents)
@@ -32,8 +33,9 @@ class DocumentService:
             raise RuntimeError(
                 f'ids and store_ids should be equal, but got ids={ids} and store_ids={store_ids}')
 
-        meta_doc_ids = store.add_documents(meta_docs)
-        store_ids.extend(meta_doc_ids)
+        if len(meta_docs) > 0:
+            meta_doc_ids = store.add_documents(meta_docs)
+            store_ids.extend(meta_doc_ids)
 
         self._config.vector_store_manager.save(store)
 
@@ -47,7 +49,7 @@ class DocumentService:
         return success
 
     @staticmethod
-    def _handle_meta_docs(docs: list[Document]) -> list[Document]:
+    def _get_meta_docs(docs: list[Document]) -> list[Document]:
         meta_docs = []
         for doc in docs:
             if 'headings' in doc.metadata:
@@ -56,7 +58,6 @@ class DocumentService:
                     metadata={'references': doc.metadata['id']}
                 )
                 meta_docs.append(meta_doc)
-                del doc.metadata['headings']
 
         return meta_docs
 

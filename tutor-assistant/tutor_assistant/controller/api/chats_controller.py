@@ -6,8 +6,9 @@ from starlette.responses import StreamingResponse
 from tutor_assistant.controller.config.domain_config import config
 from tutor_assistant.controller.utils.api_utils import check_request_body
 from tutor_assistant.controller.utils.data_transfer_utils import json_output
-from tutor_assistant.controller.utils.langchain_utils import stream_chain
+from tutor_assistant.controller.utils.langchain_utils import stream_chain, stream_response
 from tutor_assistant.domain.chats.message_chain_service import MessageChainService
+from tutor_assistant.domain.chats.message_multi_steps_chain_service import MessageMultiStepsChainService
 from tutor_assistant.domain.chats.summary_chain_service import SummaryChainService
 from tutor_assistant.utils.string_utils import shorten_middle
 
@@ -23,12 +24,14 @@ async def _message(request: Request):
 
     config.logger.info(f'POST /chats/message: len(message):{len(user_message_content)};len(history):{len(history)}')
 
-    chain = MessageChainService(config).create(user_message_content, history)
+    # chain = MessageChainService(config).create(user_message_content, history)
+
+    response = MessageMultiStepsChainService(config).load_response(user_message_content, history)
 
     config.logger.info('Starting event-stream')
 
     return StreamingResponse(
-        stream_chain(chain), media_type="text/event-stream"
+        stream_response(response), media_type="text/event-stream"
     )
 
 

@@ -8,7 +8,7 @@ from langchain_core.runnables import RunnablePassthrough, RunnableSerializable
 
 from tutor_assistant.controller.utils.data_transfer_utils import messages_from_history
 from tutor_assistant.controller.utils.langchain_utils import escape_prompt
-from tutor_assistant.domain.documents.retrievers.hybrid_retriever import HybridRetriever
+from tutor_assistant.domain.documents.retrievers.queries_loader_retriever import QueriesLoaderRetriever
 from tutor_assistant.domain.domain_config import DomainConfig
 from tutor_assistant.domain.utils.templates import prepend_base_template
 
@@ -23,11 +23,15 @@ class MessageChainService:
         chat_prompt = self._get_chat_prompt(messages)
 
         model_chain = self._get_model_chain(chat_prompt)
-        retriever = HybridRetriever(self._config)
+        retriever = QueriesLoaderRetriever(self._config)
 
-        # retriever_chain = (lambda _: user_message_content) | self._get_self_query_retriever_chain(user_message_content)
-        # retriever_chain = (lambda _: user_message_content) | self._get_base_retriever_chain(user_message_content)
+
         retriever_chain = (lambda _: messages) | retriever
+
+        if self._config.use_base_retriever:
+            retriever_chain = (lambda _: self._search_with_score(user_message_content))
+            # retriever_chain = (lambda _: user_message_content) | self._get_self_query_retriever_chain(user_message_content)
+
 
         return (
             RunnablePassthrough
@@ -79,3 +83,25 @@ class MessageChainService:
         print(retriever.invoke(query))
 
         return (lambda _: query) | retriever
+
+    def _search_with_score(self, query: str) -> list[Document]:
+        self._config.logger.info(f'Base Retriever: Running for "{query}')
+        try:
+            docs, scores = zip(
+                *self._config.vector_store_manager.load().similarity_search_with_score(
+                    query,
+                    k=4
+                )
+            )
+        except Exception as e:
+            print('Exception:', e)
+            return []
+        result = []
+        doc: Document
+        for doc, np_score in zip(docs, scores):
+            score = float(np_score)
+            doc.metadata['score'] = score
+            if np_score < 2:
+                result.append(doc)
+
+        return result

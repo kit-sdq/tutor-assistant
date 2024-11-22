@@ -171,10 +171,14 @@ class ChatService(
     private fun getContextFromJson(json: String): MessageContext {
         val root = objectMapper.readTree(json)
         return MessageContext(
-            root.getOrNull("kwargs").getOrNull("metadata").getOrNull("source")?.asText(),
-            root.getOrNull("kwargs").getOrNull("metadata").getOrNull("page")?.asInt(),
-            root.getOrNull("kwargs").getOrNull("page_content")?.asText(),
-            root.getOrNull("kwargs").getOrNull("metadata").getOrNull("originalKey")?.asText()
+            tutorAssistantId = root.getOrNull("kwargs").getOrNull("metadata").getOrNull("tutorAssistantId")?.asText(),
+            title = root.getOrNull("kwargs").getOrNull("metadata").getOrNull("title")?.asText(),
+            originalKey = root.getOrNull("kwargs").getOrNull("metadata").getOrNull("originalKey")?.asText(),
+            isCalendar = root.getOrNull("kwargs").getOrNull("metadata").getOrNull("isCalendar")?.asBoolean(),
+            heading = root.getOrNull("kwargs").getOrNull("metadata").getOrNull("heading")?.asText(),
+            page = root.getOrNull("kwargs").getOrNull("metadata").getOrNull("page")?.asInt(),
+            content = root.getOrNull("kwargs").getOrNull("page_content")?.asText(),
+            score = root.getOrNull("kwargs").getOrNull("metadata").getOrNull("score")?.asDouble(),
         )
     }
 

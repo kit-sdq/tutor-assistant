@@ -1,27 +1,35 @@
-import { Box, Divider, IconButton, List, ListItem, Typography } from '@mui/joy'
+import { Box, Divider, IconButton, List, ListItem, ListItemButton, Typography } from '@mui/joy'
 import { Cached, Delete } from '@mui/icons-material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { isPresent } from '../../../lib/utils/utils.ts'
+import { isNotPresent, isPresent } from '../../../lib/utils/utils.ts'
 
 interface Props<T extends { id?: string }> {
-    title: string
+    title?: string
     items: T[]
-    getLabel: (document: T) => string
-    onReload?: (document: T) => void
-    onDelete?: (document: T) => void
+    getLabel: (item: T) => string
+    onClick?: (item: T) => void
+    onReload?: (item: T) => void
+    onDelete?: (item: T) => void
     canManage?: boolean
 }
 
 export function StandardList<T extends { id?: string }>(
-    { title, items, getLabel, onReload, onDelete, canManage }: Props<T>,
+    { title, items, getLabel, onClick, onReload, onDelete, canManage }: Props<T>,
 ) {
 
     const { t } = useTranslation()
 
+    function handleOnClick(item: T) {
+        if (isNotPresent(onClick)) return
+        onClick(item)
+    }
+
     return (
         <>
-            <Typography level='body-sm'>{title}</Typography>
+            {isPresent(title) && (
+                <Typography level='body-sm'>{title}</Typography>
+            )}
             <List>
                 {items.map((item, index) => (
                     <React.Fragment key={item.id}>
@@ -51,7 +59,9 @@ export function StandardList<T extends { id?: string }>(
                                 </Box>
                             )}
                         >
-                            {getLabel(item)}
+                            <ListItemButton onClick={() => handleOnClick(item)}>
+                                {getLabel(item)}
+                            </ListItemButton>
                         </ListItem>
                         {index < items.length - 1 && <Divider />}
                     </React.Fragment>

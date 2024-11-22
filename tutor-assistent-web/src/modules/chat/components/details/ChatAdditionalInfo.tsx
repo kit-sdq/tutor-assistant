@@ -10,7 +10,9 @@ import { Box, Button, Card, CardActions, CardContent, IconButton, Typography } f
 import { GradingOutlined, SummarizeOutlined } from '@mui/icons-material'
 import { empty } from '../../../../lib/utils/array-utils.ts'
 import { StyledMarkdown } from '../../../../common/components/StyledMarkdown.tsx'
-import { useFiles } from '../../hooks/useFiles.ts'
+import { useOpenContexts } from '../../hooks/useOpenContexts.ts'
+import { Multiline } from '../../../../lib/components/Multiline.tsx'
+import { roundTo } from '../../../../lib/utils/math-utils.ts'
 
 interface Props {
     chat: Chat
@@ -93,22 +95,19 @@ interface ContextsProps {
 function Contexts({ contexts, onSummaryClicked }: ContextsProps) {
     const { t } = useTranslation()
 
-    const { loadFile } = useFiles()
+    const { openContexts } = useOpenContexts()
 
-    function handleOpen(context: ChatMessageContext) {
-        if (isNotPresent(context.originalKey)) return
+    if (isNotPresent(contexts)) contexts = []
 
-        if (context.originalKey.startsWith('http')) {
-            window.open(context.originalKey, '_blank')
-        } else {
-            loadFile(context.originalKey)
-        }
+    function getTitleAndPage(context: ChatMessageContext) {
+        const pageOutput = isPresent(context.page) ? `, ${t('Page')} ${context.page + 1}` : ''
+        return isPresent(context.title) ? `${context.title}${pageOutput}` : ''
     }
 
     return (
         <>
             <Header
-                title={t('Contexts')}
+                title={`${t('Sources')} (${contexts?.length ?? 0})`}
                 rightNode={
                     <IconButton color='primary' onClick={onSummaryClicked}>
                         <SummarizeOutlined />
@@ -119,25 +118,30 @@ function Contexts({ contexts, onSummaryClicked }: ContextsProps) {
                 <Scroller padding={1}>
                     <VStack gap={1}>
                         {
-                            isPresent(contexts) && (
-                                contexts.map((context, index) => (
-                                    <Card key={index}>
-                                        <CardContent sx={{ maxHeight: '300px', overflow: 'auto' }}>
-                                            {context.content.split('\n').map((content, index) => (
-                                                <Typography key={index}>{content}</Typography>
-                                            ))}
-                                        </CardContent>
-                                        {isPresent(context.originalKey) && (
-                                            <CardActions>
-                                                <Spacer />
-                                                <Button variant='outlined' onClick={() => handleOpen(context)}>
-                                                    {t('Open')}
-                                                </Button>
-                                            </CardActions>
-                                        )}
-                                    </Card>
-                                ))
-                            )
+                            contexts.map((context, index) => (
+                                <Card key={index}>
+                                    <CardContent sx={{ maxHeight: '300px', overflow: 'auto' }}>
+
+                                        <Typography level='body-sm'>
+                                            {getTitleAndPage(context)}
+                                        </Typography>
+                                        <Typography level='body-sm'>
+                                            {t('Relevance')}: {roundTo(context.score ?? -1, 2)}
+                                        </Typography>
+
+                                        <Multiline text={context.content ?? ''} />
+
+                                    </CardContent>
+                                    {isPresent(context.originalKey) && (
+                                        <CardActions>
+                                            <Spacer />
+                                            <Button variant='outlined' onClick={() => openContexts(context)}>
+                                                {t('Open')}
+                                            </Button>
+                                        </CardActions>
+                                    )}
+                                </Card>
+                            ))
                         }
                     </VStack>
 

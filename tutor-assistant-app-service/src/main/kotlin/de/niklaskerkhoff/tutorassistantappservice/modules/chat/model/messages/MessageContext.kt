@@ -5,9 +5,13 @@ import jakarta.persistence.Embeddable
 
 @Embeddable
 data class MessageContext(
-    val source: String?,
+    val tutorAssistantId: String?,
+    val title: String?,
+    val originalKey: String?,
+    val isCalendar: Boolean?,
+    val heading: String?,
     val page: Int?,
     @Column(columnDefinition = "text")
     val content: String?,
-    val originalKey: String?
+    val score: Double?
 )

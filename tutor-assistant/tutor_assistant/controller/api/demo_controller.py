@@ -5,8 +5,34 @@ from langchain_core.messages import ChatMessage
 from langchain_core.prompts import ChatPromptTemplate
 
 from tutor_assistant.controller.config.domain_config import config
+from tutor_assistant.domain.chats.message_multi_steps_chain_service import MessageMultiStepsChainService
 
 router = APIRouter()
+
+
+@router.post('/demo/multi-steps')
+async def _get_multi_steps():
+    # user_message_content = 'Was mache ich in Artemis bei Exited Prematurely'
+    # history = []
+    # MessageMultiStepsChainService(config).load_response(user_message_content, history)
+
+    # user_message_content = 'Welches Datum haben wir heute?'
+    # history = []
+    # MessageMultiStepsChainService(config).create(user_message_content, history)
+    #
+    # user_message_content = 'Wie viele Übungsblätter gibt es?'
+    # history = []
+    # MessageMultiStepsChainService(config).create(user_message_content, history)
+    #
+    user_message_content = 'Was mache ich bei Exited Prematurely'
+    history = []
+    response = MessageMultiStepsChainService(config).load_response(user_message_content, history)
+
+    for item in response:
+        if 'context' in item:
+            print(item['context'])
+        if 'answer' in item:
+            print(item['answer'])
 
 
 @router.get("/demo/messages")
@@ -18,7 +44,6 @@ async def _get_demo_messages():
             ('user', 'Mir ist langweilig')
         ]
     )
-
 
 
 @router.post('/demo/meta-docs')

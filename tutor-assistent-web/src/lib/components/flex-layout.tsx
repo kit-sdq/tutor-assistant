@@ -27,7 +27,6 @@ export const Row = styled(Stack)`
     margin: 0 !important;
     flex-direction: row;
     width: 100%;
-    align-items: center;
 `
 
 export const MainContent = styled(Box)`

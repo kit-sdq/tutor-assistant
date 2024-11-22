@@ -7,12 +7,14 @@ data class FileDocumentDto(
     val title: String,
     val loaderType: String,
     val collection: String?,
+    val fileStoreId: UUID
 ) {
     constructor(fileDocument: FileDocument) : this(
         id = fileDocument.id,
         title = fileDocument.title,
         loaderType = fileDocument.loaderType,
-        collection = fileDocument.collection
+        collection = fileDocument.collection,
+        fileStoreId = fileDocument.fileStoreId
     )
 }
 

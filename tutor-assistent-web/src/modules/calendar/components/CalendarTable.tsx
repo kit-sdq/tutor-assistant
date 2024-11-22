@@ -33,6 +33,6 @@ export function CalendarTable({ calendarEntries }: Props) {
 
 const TableRow = styled('tr')`
     &.current {
-        font-weight: bold;
+        background: ${props => props.theme.palette.background.level2};
     }
 `

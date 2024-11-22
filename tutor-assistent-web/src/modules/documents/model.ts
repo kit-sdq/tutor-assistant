@@ -11,16 +11,17 @@ export interface Resource {
 }
 
 
-export interface Document {
+export interface TutorAssistantDocument {
     id: string
     title: string
     loaderType: string
-    collection: string
+    collection?: string
 }
 
-export interface FileDocument extends Document {
+export interface FileDocument extends TutorAssistantDocument {
+    fileStoreId: string
 }
 
-export interface WebsiteDocument extends Document {
+export interface WebsiteDocument extends TutorAssistantDocument {
     url: string
 }

@@ -1,4 +1,4 @@
-import React, { FormEvent, useEffect, useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { isNotPresent, isPresent } from '../../lib/utils/utils.ts'
 import { useChatManager } from './hooks/useChatManager.ts'
@@ -6,9 +6,10 @@ import { useTranslation } from 'react-i18next'
 import { useChat } from './hooks/useChat.ts'
 import { useAsyncActionTrigger } from './hooks/useAsyncActionTrigger.ts'
 import { MainContent, Row, VStack } from '../../lib/components/flex-layout.tsx'
-import { Divider, Textarea } from '@mui/joy'
+import { Divider } from '@mui/joy'
 import { ChatDetails } from './components/details/ChatDetails.tsx'
 import { ChatOverview } from './components/overview/ChatOverview.tsx'
+import { SubmitTextarea } from '../../common/components/SubmitTextarea.tsx'
 
 
 export function ChatPage() {
@@ -31,11 +32,9 @@ export function ChatPage() {
         inputRef.current?.focus()
     }, [isSending, isLoading, inputRef.current, chatId])
 
-    async function handleFormSubmit(e?: FormEvent) {
-        e?.preventDefault()
-
+    async function handleSubmit() {
         const input = inputRef.current
-        if (isNotPresent(input) || input.value === '') return
+        if (isNotPresent(input) || input.value.trim() === '') return
 
         await handleCreateChat()
         sendMessageAction()
@@ -59,13 +58,6 @@ export function ChatPage() {
         }
     }
 
-    async function handleInput(e: React.KeyboardEvent<HTMLTextAreaElement>) {
-        if (e.ctrlKey && e.key === 'Enter') {
-            e.preventDefault()
-            handleFormSubmit()
-        }
-    }
-
     return (
         <VStack spacing={1}>
             <MainContent>
@@ -79,16 +71,14 @@ export function ChatPage() {
             <Divider sx={{ marginTop: '0px !important' }} />
             <Row alignItems='center' padding={1}>
                 <MainContent>
-                    <form onSubmit={handleFormSubmit}>
-                        <Textarea
-                            maxRows={10}
-                            onKeyDown={handleInput}
-                            sx={{ marginTop: 0 }}
-                            slotProps={{ textarea: { ref: inputRef } }}
-                            placeholder={t('Message')}
-                            disabled={isSending || isLoading}
-                        />
-                    </form>
+                    <SubmitTextarea
+                        onCtrlEnter={handleSubmit}
+                        maxRows={10}
+                        sx={{ marginTop: 0 }}
+                        slotProps={{ textarea: { ref: inputRef } }}
+                        placeholder={t('Message')}
+                        disabled={isSending || isLoading}
+                    />
                 </MainContent>
 
             </Row>
