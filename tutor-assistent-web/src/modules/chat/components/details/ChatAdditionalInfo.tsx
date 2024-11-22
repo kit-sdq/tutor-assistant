@@ -40,6 +40,8 @@ export function ChatAdditionalInfo({ chat, selectedMessageId }: Props) {
                 <ToggleButtonGroup
                     value={additionalInfo}
                     onChange={handleTabChange}
+                    spacing={0.01}
+                    variant='plain'
                     size='sm'
                 >
                     <Button value='contexts'>{t('Sources')} ({contexts?.length ?? 0})</Button>
@@ -104,9 +106,11 @@ function Contexts({ contexts }: ContextsProps) {
     }
 
     if (contexts.length === 0) return (
-        <VStack justifyContent='center' alignItems='center'>
-            <Typography>{t('Select a message')}</Typography>
-        </VStack>
+        <MainContent>
+            <VStack justifyContent='center' alignItems='center'>
+                <Typography>{t('Select a message')}</Typography>
+            </VStack>
+        </MainContent>
     )
 
     return (
