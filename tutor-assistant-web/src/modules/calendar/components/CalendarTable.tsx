@@ -1,4 +1,4 @@
-import { isPresent } from '../../../lib/utils/utils.ts'
+import { isPresent } from '../../../common/utils/utils.ts'
 import React from 'react'
 import { CalendarEntry } from '../calendar-model.ts'
 import { styled } from '@mui/joy'
@@ -8,6 +8,11 @@ interface Props {
     calendarEntries: CalendarEntry[]
 }
 
+/**
+ * Renders calendar entries in a table
+ *
+ * @param calendarEntries to be rendered
+ */
 export function CalendarTable({ calendarEntries }: Props) {
     return (
         <table className='noTableMargin'>

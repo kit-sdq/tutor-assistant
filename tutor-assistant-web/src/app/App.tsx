@@ -6,13 +6,15 @@ import { BrowserRouter } from 'react-router-dom'
 import { JoyTheme } from './JoyTheme'
 import { configureI18n } from './config/i18n-config.ts'
 import { Main } from './MainStyle.tsx'
-import { HStack, MainContent } from '../lib/components/flex-layout.tsx'
+import { HStack, MainContent } from '../common/components/containers/flex-layout.tsx'
 import { CalendarBar } from '../modules/calendar/components/CalendarBar.tsx'
 
 configureI18n(texts)
 
-
-const App = () => {
+/**
+ * Configures routing and theme; renders CalendarBar for global access and Routing
+ */
+export function App() {
     return (
         <JoyTheme>
             <BrowserRouter>
@@ -30,5 +32,3 @@ const App = () => {
         </JoyTheme>
     )
 }
-
-export default App

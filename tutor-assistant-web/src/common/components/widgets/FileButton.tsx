@@ -1,11 +1,17 @@
 import { Button, ButtonProps, styled } from '@mui/joy'
 import React, { ChangeEvent, useRef } from 'react'
-import { isNotPresent } from '../../../lib/utils/utils.ts'
+import { isNotPresent } from '../../utils/utils.ts'
 
 interface Props {
     addFile: (file: File) => void
 }
 
+/**
+ * Button for selecting files
+ *
+ * @param addFile callback to be called if a file is selected
+ * @param props of the Button
+ */
 export function FileButton({ addFile, ...props }: Props & ButtonProps) {
 
     const fileInputRef = useRef<HTMLInputElement>(null)

@@ -1,7 +1,7 @@
 import { useAuth } from '../../../app/auth/useAuth.ts'
 import { apiBaseUrl } from '../../../app/base.ts'
 import { ChatMessageFeedback } from '../chat-model.ts'
-import { isNotPresent } from '../../../lib/utils/utils.ts'
+import { isNotPresent } from '../../../common/utils/utils.ts'
 import { useChatContext } from '../useChatContext.ts'
 
 export function useChatMessageFeedback() {

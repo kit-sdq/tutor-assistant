@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { byNumberReverse, isNotPresent, stringToNumber } from '../utils/utils.ts'
-import { last } from '../utils/array-utils.ts'
+import { byNumberReverse, isNotPresent, stringToNumber } from '../../utils/utils.ts'
+import { last } from '../../utils/array-utils.ts'
 import { HStack, MainContent, VStack } from './flex-layout.tsx'
 import { Scroller } from './Scroller.tsx'
 
@@ -14,6 +14,17 @@ interface Props<T> {
     spacing?: number
 }
 
+/**
+ * Renders items in a column layout
+ *
+ * @param columnCounts defines the number of columns absolutely or dependent of the window width (in px):
+ *              Examples: 3, {0: 1, 400: 2, 800: 3}
+ * @param fill either vertical-wise or horizontal-wise
+ * @param values to be rendered
+ * @param render applied on each value
+ * @param spacing between the rendered items. Defaults to 0
+ * @constructor
+ */
 export function ColumnLayout<T>({ columnCounts, fill, values, render, spacing }: Props<T>) {
 
     if (isNotPresent(spacing)) spacing = 0

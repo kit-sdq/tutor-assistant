@@ -1,8 +1,8 @@
-import { Row } from './flex-layout.tsx'
-import { range } from '../utils/array-utils.ts'
+import { Row } from '../containers/flex-layout.tsx'
+import { range } from '../../utils/array-utils.ts'
 import { useState } from 'react'
 import { Star, StarOutline } from '@mui/icons-material'
-import { isPresent } from '../utils/utils.ts'
+import { isPresent } from '../../utils/utils.ts'
 
 interface Props {
     max: number
@@ -10,6 +10,16 @@ interface Props {
     onSelect: (rating: number) => void
 }
 
+/**
+ * Picker of star icons
+ *
+ * Controlled component
+ *
+ * @param max number of stars
+ * @param rating currently selected. Takes values from 1 to max (both inclusive)
+ * @param onSelect function called when a star is clicked. Takes the rating
+ * @constructor
+ */
 export function StarRater({ max, rating, onSelect }: Props) {
     const [preview, setPreview] = useState<number>()
 

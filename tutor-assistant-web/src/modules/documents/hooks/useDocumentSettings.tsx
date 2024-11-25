@@ -1,10 +1,23 @@
 import { apiBaseUrl } from '../../../app/base.ts'
-import { append, partition, remove } from '../../../lib/utils/array-utils.ts'
+import { append, partition, remove } from '../../../common/utils/array-utils.ts'
 import { useAuth } from '../../../app/auth/useAuth.ts'
 import { useEffect, useMemo, useState } from 'react'
 import { Resource, Setting } from '../model.ts'
-import { isNotPresent } from '../../../lib/utils/utils.ts'
+import { isNotPresent } from '../../../common/utils/utils.ts'
 
+
+/**
+ * Manages main settings, value settings and resources.
+ *
+ * Provides:
+ * @property mainSettings array.
+ * @property valueSettings array.
+ * @property resources array.
+ * @property addSetting add a main setting or a value setting.
+ * @property deleteSetting delete a main setting or a value setting.
+ * @property addResource add a resource.
+ * @property deleteResource delete a resource.
+ */
 export function useDocumentSettings() {
 
     const { getAuthHttp } = useAuth()

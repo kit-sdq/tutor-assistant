@@ -1,7 +1,7 @@
 import { createContext, Dispatch, SetStateAction, useState } from 'react'
 import { Chat, ChatMessageFeedback } from './chat-model.ts'
-import { ChildrenProps } from '../../lib/types.ts'
-import { chill } from '../../lib/utils/utils.ts'
+import { ChildrenProps } from '../../common/types.ts'
+import { chill } from '../../common/utils/utils.ts'
 
 type ChatContextType = {
     chats: Chat[]

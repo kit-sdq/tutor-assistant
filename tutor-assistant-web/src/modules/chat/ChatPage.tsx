@@ -1,15 +1,15 @@
 import React, { useEffect, useRef } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { isNotPresent, isPresent } from '../../lib/utils/utils.ts'
+import { isNotPresent, isPresent } from '../../common/utils/utils.ts'
 import { useChatManager } from './hooks/useChatManager.ts'
 import { useTranslation } from 'react-i18next'
 import { useSelectedChat } from './hooks/useSelectedChat.ts'
 import { useAsyncActionTrigger } from './hooks/useAsyncActionTrigger.ts'
-import { MainContent, Row, VStack } from '../../lib/components/flex-layout.tsx'
+import { MainContent, Row, VStack } from '../../common/components/containers/flex-layout.tsx'
 import { Divider } from '@mui/joy'
 import { ChatDetails } from './components/details/ChatDetails.tsx'
 import { ChatOverview } from './components/overview/ChatOverview.tsx'
-import { SubmitTextarea } from '../../common/components/SubmitTextarea.tsx'
+import { SubmitTextarea } from '../../common/components/widgets/SubmitTextarea.tsx'
 
 
 export function ChatPage() {
@@ -73,7 +73,7 @@ export function ChatPage() {
             <Row alignItems='center' padding={1}>
                 <MainContent>
                     <SubmitTextarea
-                        onCtrlEnter={handleSubmit}
+                        onSubmit={handleSubmit}
                         maxRows={10}
                         sx={{ marginTop: 0 }}
                         slotProps={{ textarea: { ref: inputRef } }}

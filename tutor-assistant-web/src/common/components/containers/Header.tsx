@@ -1,7 +1,7 @@
-import { Row, Spacer } from '../../lib/components/flex-layout.tsx'
+import { Row, Spacer } from './flex-layout.tsx'
 import { Divider, Typography } from '@mui/joy'
 import React, { ReactNode } from 'react'
-import { isPresent } from '../../lib/utils/utils.ts'
+import { isPresent } from '../../utils/utils.ts'
 
 interface Props {
     title: ReactNode | string
@@ -9,6 +9,14 @@ interface Props {
     rightNode?: ReactNode
 }
 
+
+/**
+ * Horizontal bar to render a title with additional items at the top
+ *
+ * @param title rendered in the middle of the bar
+ * @param leftNode rendered at the left border
+ * @param rightNode rendered at the right border
+ */
 export function Header({ title, leftNode, rightNode }: Props) {
     return (
         <>

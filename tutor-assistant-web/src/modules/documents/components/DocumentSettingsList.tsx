@@ -1,12 +1,12 @@
-import { MainContent, Row, Spacer, VStack } from '../../../lib/components/flex-layout.tsx'
+import { MainContent, Row, Spacer, VStack } from '../../../common/components/containers/flex-layout.tsx'
 import { useDocumentSettings } from '../hooks/useDocumentSettings.tsx'
 import { StandardList } from './StandardList.tsx'
 import { useTranslation } from 'react-i18next'
 import { Add } from '@mui/icons-material'
-import { Scroller } from '../../../lib/components/Scroller.tsx'
-import { FileButton } from './FileButton.tsx'
-import { Bar } from '../../../common/components/Bar.tsx'
-import { Header } from '../../../common/components/Header.tsx'
+import { Scroller } from '../../../common/components/containers/Scroller.tsx'
+import { FileButton } from '../../../common/components/widgets/FileButton.tsx'
+import { Bar } from '../../../common/components/containers/Bar.tsx'
+import { Header } from '../../../common/components/containers/Header.tsx'
 import React from 'react'
 import { useOpenContexts } from '../../chat/hooks/useOpenContexts.ts'
 
@@ -14,6 +14,11 @@ interface Props {
     canManage: boolean
 }
 
+/**
+ * Renders a list for displaying and managing the document settings: main setting, value settings, resources.
+ *
+ * @param canManage true if the user can manage the documents, false if they can only view.
+ */
 export function DocumentSettingsList({ canManage }: Props) {
 
     const {
@@ -83,7 +88,3 @@ export function DocumentSettingsList({ canManage }: Props) {
         </Bar>
     )
 }
-
-
-
-

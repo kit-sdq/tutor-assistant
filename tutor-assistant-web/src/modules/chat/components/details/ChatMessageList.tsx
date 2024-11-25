@@ -1,4 +1,4 @@
-import { VStack } from '../../../../lib/components/flex-layout.tsx'
+import { VStack } from '../../../../common/components/containers/flex-layout.tsx'
 import { ChatMessage } from '../../chat-model.ts'
 import { ChatMessageItem } from './ChatMessageItem.tsx'
 

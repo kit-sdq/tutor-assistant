@@ -2,14 +2,13 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import { ChatPage } from '../../modules/chat/ChatPage.tsx'
 import { Authenticated } from '../auth/Authenticated.tsx'
 import { DocumentsPage } from '../../modules/documents/DocumentsPage.tsx'
-import { HelperPage } from '../../modules/helper/HelperPage.tsx'
 import { ChatProvider } from '../../modules/chat/ChatProvider.tsx'
 
-interface Props {
-
-}
-
-export function Routing({}: Props) {
+/**
+ * Configures routing
+ * Sub routes might be configured in child components
+ */
+export function Routing() {
 
     return (
         <Routes>
@@ -30,14 +29,6 @@ export function Routing({}: Props) {
                 path='/documents' element={
                 <Authenticated>
                     <DocumentsPage />
-                </Authenticated>
-            }
-            />
-
-            <Route
-                path='/helper/*' element={
-                <Authenticated roles={['document-manager']}>
-                    <HelperPage />
                 </Authenticated>
             }
             />

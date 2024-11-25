@@ -2,8 +2,8 @@ import { Chat as ChatModel, Chat } from '../chat-model.ts'
 import { apiBaseUrl } from '../../../app/base.ts'
 import { useAuth } from '../../../app/auth/useAuth.ts'
 import { useEffect, useMemo } from 'react'
-import { remove } from '../../../lib/utils/array-utils.ts'
-import { isPresent } from '../../../lib/utils/utils.ts'
+import { remove } from '../../../common/utils/array-utils.ts'
+import { isPresent } from '../../../common/utils/utils.ts'
 import { useChatContext } from '../useChatContext.ts'
 
 export function useChatManager() {

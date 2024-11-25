@@ -1,20 +1,17 @@
-import { HStack, MainContent, VStack } from '../../../../lib/components/flex-layout.tsx'
+import { HStack, MainContent, VStack } from '../../../../common/components/containers/flex-layout.tsx'
 import { ChatMessageList } from './ChatMessageList.tsx'
 import React, { useEffect } from 'react'
-import { Scroller } from '../../../../lib/components/Scroller.tsx'
-import { Header } from '../../../../common/components/Header.tsx'
+import { Scroller } from '../../../../common/components/containers/Scroller.tsx'
+import { Header } from '../../../../common/components/containers/Header.tsx'
 import { useTranslation } from 'react-i18next'
 import { IconButton } from '@mui/joy'
 import { useNavigate } from 'react-router-dom'
 import { ArrowBackIosNew } from '@mui/icons-material'
-import { isNotPresent } from '../../../../lib/utils/utils.ts'
-import { last } from '../../../../lib/utils/array-utils.ts'
+import { isNotPresent } from '../../../../common/utils/utils.ts'
+import { last } from '../../../../common/utils/array-utils.ts'
 import { ChatAdditionalInfo } from './ChatAdditionalInfo.tsx'
 import { useChatContext } from '../../useChatContext.ts'
 
-
-interface Props {
-}
 
 export function ChatDetails() {
     const { t } = useTranslation()
@@ -49,7 +46,7 @@ export function ChatDetails() {
                             padding={1}
                             scrollToBottomOnChange={[
                                 selectedChat,
-                                last(selectedChat.messages)?.content?.length ?? 0
+                                last(selectedChat.messages)?.content?.length ?? 0,
                             ]}
                         >
                             <ChatMessageList

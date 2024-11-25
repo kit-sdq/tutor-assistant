@@ -5,6 +5,13 @@ import { CalendarEntry } from './calendar-model.ts'
 import { format } from 'date-fns'
 import { useTranslation } from 'react-i18next'
 
+/**
+ * Loads and manages the calendar
+ *
+ * Provides
+ * @property calendarEntries loaded
+ * @property loadNewCalendar requests the creation of a new calendar and loads its entries
+ */
 export function useCalendar() {
     const { t } = useTranslation()
     const { getAuthHttp } = useAuth()

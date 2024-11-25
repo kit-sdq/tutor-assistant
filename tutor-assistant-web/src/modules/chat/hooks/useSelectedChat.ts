@@ -1,11 +1,11 @@
 import { useEffect, useRef, useState } from 'react'
 import { Chat, ChatMessage } from '../chat-model.ts'
-import { last, lastIndex } from '../../../lib/utils/array-utils.ts'
+import { last, lastIndex } from '../../../common/utils/array-utils.ts'
 import { apiBaseUrl } from '../../../app/base.ts'
 import { useAuth } from '../../../app/auth/useAuth.ts'
 import { SSE, SSEvent } from 'sse.js'
 import { useKeycloak } from '@react-keycloak/web'
-import { isNotPresent } from '../../../lib/utils/utils.ts'
+import { isNotPresent } from '../../../common/utils/utils.ts'
 import { useChatContext } from '../useChatContext.ts'
 
 export function useSelectedChat(chatId: string | undefined) {

@@ -1,5 +1,5 @@
-import { HStack, MainContent, VStack } from '../../lib/components/flex-layout.tsx'
-import { Header } from '../../common/components/Header.tsx'
+import { HStack, MainContent, VStack } from '../../common/components/containers/flex-layout.tsx'
+import { Header } from '../../common/components/containers/Header.tsx'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 import { Button } from '@mui/joy'
@@ -9,11 +9,12 @@ import { DocumentSettingsList } from './components/DocumentSettingsList.tsx'
 import { TutorAssistantDocumentsList } from './components/TutorAssistantDocumentsList.tsx'
 import { useAuth } from '../../app/auth/useAuth.ts'
 
-interface Props {
 
-}
-
-export function DocumentsPage({}: Props) {
+/**
+ * View and manage documents.
+ * This includes uploading settings and perform indexing based on these settings.
+ */
+export function DocumentsPage() {
     const navigate = useNavigate()
     const { t } = useTranslation()
 

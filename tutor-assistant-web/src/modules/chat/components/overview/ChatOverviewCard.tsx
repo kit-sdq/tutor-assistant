@@ -13,7 +13,7 @@ import {
     MenuItem,
     Typography,
 } from '@mui/joy'
-import { MainContent, Row, Spacer } from '../../../../lib/components/flex-layout.tsx'
+import { MainContent, Row, Spacer } from '../../../../common/components/containers/flex-layout.tsx'
 import { MoreVert } from '@mui/icons-material'
 import React from 'react'
 

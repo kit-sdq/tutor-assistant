@@ -1,7 +1,7 @@
 import { Box } from '@mui/joy'
 import { ReactNode, useEffect, useRef } from 'react'
-import { isNotPresent } from '../utils/utils.ts'
-import { empty } from '../utils/array-utils.ts'
+import { isNotPresent } from '../../utils/utils.ts'
+import { empty } from '../../utils/array-utils.ts'
 
 interface Props {
     children: ReactNode
@@ -9,6 +9,14 @@ interface Props {
     scrollToBottomOnChange?: unknown[]
 }
 
+/**
+ * Renders items in a vertically scrollable container
+ *
+ * @param children to be rendered inside this wrapper
+ * @param padding between this wrapper and its content
+ * @param scrollToBottomOnChange dependencies on whose change to scroll down to the bottom
+ * @constructor
+ */
 export function Scroller({ children, padding, scrollToBottomOnChange }: Props) {
     if (isNotPresent(scrollToBottomOnChange)) scrollToBottomOnChange = []
 

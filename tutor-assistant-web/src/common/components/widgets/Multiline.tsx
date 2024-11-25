@@ -5,6 +5,14 @@ interface Props {
     text: string
 }
 
+
+/**
+ * Renders \n as <br />
+ *
+ * @param text to be rendered
+ * @param props of Typography
+ * @constructor
+ */
 export function Multiline({ text, ...props }: Props & TypographyProps) {
     const lines = text.split('\n')
     const maxIndex = lines.length - 1

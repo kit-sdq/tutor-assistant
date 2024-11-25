@@ -1,6 +1,6 @@
 import { useFiles } from './useFiles.ts'
 import { ChatMessageContext } from '../chat-model.ts'
-import { isNotPresent } from '../../../lib/utils/utils.ts'
+import { isNotPresent } from '../../../common/utils/utils.ts'
 
 export function useOpenContexts() {
     const { loadFile } = useFiles()

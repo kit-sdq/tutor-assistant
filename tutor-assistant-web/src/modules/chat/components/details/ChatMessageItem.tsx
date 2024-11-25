@@ -2,15 +2,15 @@ import { styled, Typography } from '@mui/joy'
 import { ChatMessage } from '../../chat-model.ts'
 import rehypeHighlight from 'rehype-highlight'
 import React, { useEffect, useState } from 'react'
-import { isNotPresent, isPresent } from '../../../../lib/utils/utils.ts'
+import { isNotPresent, isPresent } from '../../../../common/utils/utils.ts'
 import classNames from 'classnames'
 import remarkGfm from 'remark-gfm'
-import { StyledMarkdown } from '../../../../common/components/StyledMarkdown.tsx'
-import { StarRater } from '../../../../lib/components/StarRater.tsx'
+import { StyledMarkdown } from '../../../../common/components/widgets/StyledMarkdown.tsx'
+import { StarRater } from '../../../../common/components/widgets/StarRater.tsx'
 import { useChatMessageFeedback } from '../../hooks/useChatMessageFeedback.ts'
 import { useTranslation } from 'react-i18next'
-import { SubmitTextarea } from '../../../../common/components/SubmitTextarea.tsx'
-import { Multiline } from '../../../../lib/components/Multiline.tsx'
+import { SubmitTextarea } from '../../../../common/components/widgets/SubmitTextarea.tsx'
+import { Multiline } from '../../../../common/components/widgets/Multiline.tsx'
 
 
 interface Props {
@@ -72,7 +72,7 @@ export function ChatMessageItem({ message, onMessageClick, selectedMessageId }: 
                                 </StyledMarkdown>
                                 {isSelected(message.id) && (
                                     <SubmitTextarea
-                                        onCtrlEnter={handleSendFeedback}
+                                        onSubmit={handleSendFeedback}
                                         value={selectedMessageFeedback?.content ?? ''}
                                         placeholder={t('Feedback')}
                                         onChange={e => {

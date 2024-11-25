@@ -1,5 +1,8 @@
 import { Box, styled } from '@mui/joy'
 
+/**
+ * Applies global styling according to the theme
+ */
 export const Main = styled(Box)`
     width: 100%;
     height: 100%;
