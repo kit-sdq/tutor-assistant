@@ -14,7 +14,7 @@ services:
       - tutor-assistant-keycloak
 
   tutor-assistant:
-    image: zaeunepyrite01/tutor-assistant:latest
+    image: ghcr.io/kit-sdq/tutor-assistant:latest
     container_name: tutor-assistant
     restart: always
     env_file:
@@ -25,14 +25,14 @@ services:
       - tutor-assistant
 
   tutor-assistant-web:
-    image: zaeunepyrite01/tutor-assistant-web:latest
+    image: ghcr.io/kit-sdq/tutor-assistant-web:latest
     container_name: tutor-assistant-web
     restart: always
     networks:
       - tutor-assistant
 
   tutor-assistant-app-service:
-    image: zaeunepyrite01/tutor-assistant-app-service:latest
+    image: ghcr.io/kit-sdq/tutor-assistant-app-service:latest
     container_name: tutor-assistant-app-service
     restart: always
     depends_on:

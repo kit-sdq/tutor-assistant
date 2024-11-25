@@ -1,6 +1,7 @@
 package de.niklaskerkhoff.tutorassistantappservice.modules.chat.controller
 
 import de.niklaskerkhoff.tutorassistantappservice.lib.app_components.AppController
+import de.niklaskerkhoff.tutorassistantappservice.lib.security.hasAuthority
 import de.niklaskerkhoff.tutorassistantappservice.modules.chat.model.ChatBaseData
 import de.niklaskerkhoff.tutorassistantappservice.modules.chat.model.ChatMainData
 import de.niklaskerkhoff.tutorassistantappservice.modules.chat.model.ChatService
@@ -20,10 +21,12 @@ class ChatController(
 ) : AppController() {
     @GetMapping("{chatId}")
     fun getChatById(@PathVariable chatId: UUID, jwt: JwtAuthenticationToken): ChatMainData =
-        chatService.getChatById(chatId, jwt.name)
+        chatService.getChatById(chatId, jwt.name, !jwt.hasAuthority("ROLE_evaluator"))
 
     @GetMapping
-    fun getChats(jwt: JwtAuthenticationToken): List<ChatBaseData> = chatService.getChats(jwt.name)
+    fun getChats(jwt: JwtAuthenticationToken): List<ChatBaseData> =
+        if (jwt.hasAuthority("ROLE_evaluator")) chatService.getAllChats()
+        else chatService.getUsersChats(jwt.name)
 
     @PostMapping
     fun createChat(jwt: JwtAuthenticationToken): ChatBaseData = chatService.createChat(jwt.name)

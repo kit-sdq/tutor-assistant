@@ -41,10 +41,12 @@ class ChatService(
     @Value("\${app.tutor-assistant.base-url}")
     private lateinit var baseUrl: String
 
-    fun getChats(userId: String) = chatRepo.findByUserIdOrderByCreatedDateDesc(userId).map { ChatBaseData(it) }
+    fun getUsersChats(userId: String) = chatRepo.findByUserIdOrderByCreatedDateDesc(userId).map { ChatBaseData(it) }
 
-    fun getChatById(chatId: UUID, userId: String): ChatMainData {
-        val chat = chatRepo.findByIdOrThrow(chatId).requireUser(userId)
+    fun getAllChats() = chatRepo.findAllByOrderByCreatedDateDesc().map { ChatBaseData(it) }
+
+    fun getChatById(chatId: UUID, userId: String, requiresMatchingUser: Boolean = true): ChatMainData {
+        val chat = chatRepo.findByIdOrThrow(chatId).requireUser(userId, requiresMatchingUser)
         return ChatMainData(chat)
     }
 
@@ -186,8 +188,8 @@ class ChatService(
         return if (this?.has(key) == true) this[key] else null
     }
 
-    private fun Chat.requireUser(userId: String): Chat {
-        if (this.userId != userId) throw ResponseStatusException(HttpStatus.NOT_FOUND)
+    private fun Chat.requireUser(userId: String, requiresMatchingUser: Boolean = true): Chat {
+        if (requiresMatchingUser && this.userId != userId) throw ResponseStatusException(HttpStatus.NOT_FOUND)
         return this
     }
 }
