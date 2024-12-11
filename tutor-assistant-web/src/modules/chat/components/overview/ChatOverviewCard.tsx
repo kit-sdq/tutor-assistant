@@ -22,7 +22,14 @@ interface Props {
     deleteChat: (chatId: string) => void,
 }
 
-
+/**
+ * Displays a chat card for each chat.
+ * Displays the summary, menu with delete option and button for opening the chat in ChatDetails.
+ *
+ * @param chat to be displayed.
+ * @param deleteChat function for deleting a chat.
+ * @constructor
+ */
 export function ChatCard({ chat, deleteChat }: Props) {
     const { t } = useTranslation()
     const navigate = useNavigate()

@@ -2,17 +2,17 @@ import { HStack, MainContent, VStack } from '../../common/components/containers/
 import { Header } from '../../common/components/containers/Header.tsx'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
-import { Button } from '@mui/joy'
+import { IconButton } from '@mui/joy'
 import { ArrowBackIosNew } from '@mui/icons-material'
 import React from 'react'
 import { DocumentSettingsList } from './components/DocumentSettingsList.tsx'
-import { TutorAssistantDocumentsList } from './components/TutorAssistantDocumentsList.tsx'
+import { DocumentsList } from './components/DocumentsList.tsx'
 import { useAuth } from '../../app/auth/useAuth.ts'
 
 
 /**
  * View and manage documents.
- * This includes uploading settings and perform indexing based on these settings.
+ * This includes uploading settings and perform embedding based on these settings.
  */
 export function DocumentsPage() {
     const navigate = useNavigate()
@@ -31,19 +31,14 @@ export function DocumentsPage() {
                     <VStack>
                         <Header
                             leftNode={
-                                <Button
-                                    color='primary'
-                                    variant='plain'
-                                    onClick={() => navigate('/chats')}
-                                    startDecorator={<ArrowBackIosNew />}
-                                >
-                                    {t('Chats')}
-                                </Button>
+                                <IconButton color='primary' onClick={() => navigate('/chats')}>
+                                    <ArrowBackIosNew />
+                                </IconButton>
                             }
                             title={t('Documents')}
                         />
                         <MainContent>
-                            <TutorAssistantDocumentsList canManage={canManage} />
+                            <DocumentsList canManage={canManage} />
                         </MainContent>
                     </VStack>
                 </MainContent>

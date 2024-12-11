@@ -4,6 +4,9 @@ import de.niklaskerkhoff.tutorassistantappservice.modules.chat.model.messages.Me
 import de.niklaskerkhoff.tutorassistantappservice.modules.chat.model.messages.MessageContext
 import java.util.*
 
+/**
+ * Chat data with messages. Used for displaying chat details.
+ */
 data class ChatMainData(
     val id: UUID?,
     val summary: ChatSummary?,
@@ -19,6 +22,9 @@ data class ChatMainData(
     )
 }
 
+/**
+ * Chat data without messages. Used for overview of chats.
+ */
 data class ChatBaseData(
     val id: UUID?,
     val summary: ChatSummary?,

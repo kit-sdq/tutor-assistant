@@ -8,6 +8,19 @@ import { useKeycloak } from '@react-keycloak/web'
 import { isNotPresent } from '../../../common/utils/utils.ts'
 import { useChatContext } from '../useChatContext.ts'
 
+
+/**
+ * Loads and provides the selected chat.
+ * Handles message sending and response message loading.
+ * Loads response messages are loaded from an event stream.
+ *
+ * @returns
+ *      * selectedChat: the selected chat.
+ *      * sendMessage(message: string): function for sending messages.
+ *      * isLoading: true while sending new message and waiting for response to finish loading. false otherwise.
+ *
+ * @param chatId of the selected chat. Undefined if no chat is selected.
+ */
 export function useSelectedChat(chatId: string | undefined) {
     const eventStreamEnd = '=====END====='
     const messageEnd = '=====MESSAGE_END====='
@@ -21,10 +34,7 @@ export function useSelectedChat(chatId: string | undefined) {
 
     const { keycloak } = useKeycloak()
 
-    console.log('setSelectedChat', setSelectedChat)
-    console.log(chatId)
     useEffect(() => {
-        console.log('loadChat')
         loadChat()
         return () => {
             cleanupStreaming()
@@ -39,7 +49,6 @@ export function useSelectedChat(chatId: string | undefined) {
         }
         setIsLoading(true)
         const result = await getAuthHttp().get<Chat>(`${apiBaseUrl}/chats/${chatId}`)
-        console.log('result.data', result.data)
         setSelectedChat(result.data)
         setIsLoading(false)
     }

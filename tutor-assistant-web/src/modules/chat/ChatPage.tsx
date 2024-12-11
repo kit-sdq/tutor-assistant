@@ -4,7 +4,7 @@ import { isNotPresent, isPresent } from '../../common/utils/utils.ts'
 import { useChatManager } from './hooks/useChatManager.ts'
 import { useTranslation } from 'react-i18next'
 import { useSelectedChat } from './hooks/useSelectedChat.ts'
-import { useAsyncActionTrigger } from './hooks/useAsyncActionTrigger.ts'
+import { useAsyncActionTrigger } from '../../common/hooks/useAsyncActionTrigger.ts'
 import { MainContent, Row, VStack } from '../../common/components/containers/flex-layout.tsx'
 import { Divider } from '@mui/joy'
 import { ChatDetails } from './components/details/ChatDetails.tsx'
@@ -12,6 +12,11 @@ import { ChatOverview } from './components/overview/ChatOverview.tsx'
 import { SubmitTextarea } from '../../common/components/widgets/SubmitTextarea.tsx'
 
 
+/**
+ * Shows either ChatOverview or ChatDetails together with a Textarea for sending messages.
+ * In case of ChatDetails sending messages adds the message to the opened chat.
+ * In case of ChatOverview sending messages leads to creating a new chat with this message and opening it in ChatDetails.
+ */
 export function ChatPage() {
     const { t } = useTranslation()
     const navigate = useNavigate()
@@ -21,7 +26,6 @@ export function ChatPage() {
     const chatId = useParams().chatId
     const { createChat } = useChatManager()
     const { selectedChat, sendMessage, isLoading } = useSelectedChat(chatId)
-    console.log('selectedChat', selectedChat)
     const [isSending, sendMessageAction] = useAsyncActionTrigger(
         handleSend,
         () => isPresent(selectedChat) && selectedChat.id === chatId,

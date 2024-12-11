@@ -33,7 +33,6 @@ export function useCalendar() {
     async function loadNewCalendar() {
         await getAuthHttp().post<string>(`${apiBaseUrl}/calendar`)
         loadCalendarEntries()
-        console.log('New Info loaded')
     }
 
     return {

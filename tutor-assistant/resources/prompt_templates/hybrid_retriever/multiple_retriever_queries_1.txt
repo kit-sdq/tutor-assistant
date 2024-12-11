@@ -1,5 +1,0 @@
-Dies ist ein Chatverlauf.
-Untersuche, welche groben Themen in der letzten Nachricht des Benutzers vorkommen. Benenne sie jeweils mit einem Begriff.
-Gib möglichst wenig Begriffe aus. Sie sollen nur die Hauptthemen der Anfragen abdecken. Häufig wird nur ein Begriff notwendig sein.
-Verwende die anderen Nachrichten nur, um den Kontext der letzten Nachricht zu verstehen.
-Ganz wichtig: Beantworte nicht die Frage. Gib nur die Begriffe zu den groben Themen aus. Trenne sie mit Semikolons.

@@ -25,14 +25,14 @@ export interface Resource {
 }
 
 /**
- * Indexed document
+ * Embedded document
  *
  * @property id unique string
  * @property title human readable string, must not be unique
  * @property loaderType specifying how the document is loaded
  * @property collection for grouping
  */
-export interface TutorAssistantDocument {
+export interface RagDocument {
     id: string
     title: string
     loaderType: string
@@ -40,19 +40,19 @@ export interface TutorAssistantDocument {
 }
 
 /**
- * Indexed file document
+ * Embedded file document
  *
  * @property fileStoreId unique string from the file store
  */
-export interface FileDocument extends TutorAssistantDocument {
+export interface FileDocument extends RagDocument {
     fileStoreId: string
 }
 
 /**
- * Indexed website document
+ * Embedded website document
  *
  * @property url of the website
  */
-export interface WebsiteDocument extends TutorAssistantDocument {
+export interface WebsiteDocument extends RagDocument {
     url: string
 }

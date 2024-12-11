@@ -1,9 +1,14 @@
-import { useFiles } from './useFiles.ts'
+import { useFileResources } from './useFileResources.ts'
 import { ChatMessageContext } from '../chat-model.ts'
 import { isNotPresent } from '../../../common/utils/utils.ts'
 
+
+/**
+ * Opens a context from a website-resource or file-resource inside the browser.
+ * @see useFileResources
+ */
 export function useOpenContexts() {
-    const { loadFile } = useFiles()
+    const { loadFile } = useFileResources()
 
     function openContexts(context: ChatMessageContext | string | undefined) {
         if (isNotPresent(context)) return

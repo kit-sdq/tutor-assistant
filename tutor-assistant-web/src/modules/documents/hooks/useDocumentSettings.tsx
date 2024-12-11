@@ -34,12 +34,12 @@ export function useDocumentSettings() {
     }, [])
 
     async function loadSettings() {
-        const response = await getAuthHttp().get<Setting[]>(`${apiBaseUrl}/documents/settings`)
+        const response = await getAuthHttp().get<Setting[]>(`${apiBaseUrl}/embedding_manager/settings`)
         setSettings(response.data)
     }
 
     async function loadResources() {
-        const response = await getAuthHttp().get<Resource[]>(`${apiBaseUrl}/documents/resources`)
+        const response = await getAuthHttp().get<Resource[]>(`${apiBaseUrl}/embedding_manager/resources`)
         setResources(response.data)
     }
 
@@ -59,12 +59,12 @@ export function useDocumentSettings() {
     }
 
     async function deleteSetting(id: string) {
-        await getAuthHttp().delete(`${apiBaseUrl}/documents/settings/${id}`)
+        await getAuthHttp().delete(`${apiBaseUrl}/embedding_manager/settings/${id}`)
         setSettings(prevState => remove(id, prevState))
     }
 
     async function deleteResource(id: string) {
-        await getAuthHttp().delete(`${apiBaseUrl}/documents/resources/${id}`)
+        await getAuthHttp().delete(`${apiBaseUrl}/embedding_manager/resources/${id}`)
         setResources(prevState => remove(id, prevState))
     }
 
@@ -74,7 +74,7 @@ export function useDocumentSettings() {
         formData.append('file', file)
 
         try {
-            return await getAuthHttp().post<R>(`${apiBaseUrl}/documents/${pathEnding}`, formData, {
+            return await getAuthHttp().post<R>(`${apiBaseUrl}/embedding_manager/${pathEnding}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },

@@ -2,5 +2,8 @@ package de.niklaskerkhoff.tutorassistantappservice.lib.app_components
 
 import de.niklaskerkhoff.tutorassistantappservice.lib.logging.Logger
 
-abstract class AppService : Logger {
-}
+/**
+ * Abstract class every service should inherit from.
+ * Provides base functionality and ensures extensibility.
+ */
+abstract class AppService : Logger

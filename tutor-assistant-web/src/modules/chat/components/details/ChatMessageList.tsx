@@ -8,6 +8,14 @@ interface Props {
     selectedMessageId?: string
 }
 
+
+/**
+ * Displays all messages as ChatMessageItems in a VStack.
+ *
+ * @param messages to be displayed.
+ * @param onMessageClick callback when a message is clicked.
+ * @param selectedMessageId id of the selected message.
+ */
 export function ChatMessageList({ messages, onMessageClick, selectedMessageId }: Props) {
 
     return (

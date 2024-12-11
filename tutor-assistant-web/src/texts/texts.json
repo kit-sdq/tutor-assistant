@@ -19,6 +19,10 @@
     "en": "Documents",
     "de": "Dokumente"
   },
+  "Embed": {
+    "en": "Embed",
+    "de": "Einbetten"
+  },
   "Feedback": {
     "en": "Feedback",
     "de": "Feedback"
@@ -34,10 +38,6 @@
   "General": {
     "en": "General",
     "de": "Allgemein"
-  },
-  "Index": {
-    "en": "Index",
-    "de": "Indizieren"
   },
   "Logout": {
     "en": "Logout",

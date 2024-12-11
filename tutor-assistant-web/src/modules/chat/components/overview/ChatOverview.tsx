@@ -9,6 +9,10 @@ import { ChatCard } from './ChatOverviewCard.tsx'
 import { Button } from '@mui/joy'
 import { useNavigate } from 'react-router-dom'
 
+
+/**
+ * Displays overview page content. Displays a chat card for each chat.
+ */
 export function ChatOverview() {
 
     const { t } = useTranslation()

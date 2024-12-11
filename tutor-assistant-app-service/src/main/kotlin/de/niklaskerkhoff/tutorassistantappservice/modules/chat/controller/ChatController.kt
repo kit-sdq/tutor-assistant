@@ -19,24 +19,51 @@ import java.util.*
 class ChatController(
     private val chatService: ChatService
 ) : AppController() {
+
+    /**
+     * Chat details.
+     * Can be accessed if it is their own chat, or they have ROLE_evaluator
+     * @see ChatService.getChatById
+     * @returns chat as ChatMainData
+     */
     @GetMapping("{chatId}")
     fun getChatById(@PathVariable chatId: UUID, jwt: JwtAuthenticationToken): ChatMainData =
         chatService.getChatById(chatId, jwt.name, !jwt.hasAuthority("ROLE_evaluator"))
 
+    /**
+     * Overview of chats.
+     * ROLE_evaluator can see all chats, others only their own.
+     *
+     * @see ChatService.getAllChats
+     * @see ChatService.getUsersChats
+     * @returns a list of chats as ChatBaseData.
+     */
     @GetMapping
     fun getChats(jwt: JwtAuthenticationToken): List<ChatBaseData> =
         if (jwt.hasAuthority("ROLE_evaluator")) chatService.getAllChats()
         else chatService.getUsersChats(jwt.name)
 
+    /**
+     * @see ChatService.createChat
+     */
     @PostMapping
     fun createChat(jwt: JwtAuthenticationToken): ChatBaseData = chatService.createChat(jwt.name)
 
+    /**
+     * @see ChatService.deleteChat
+     */
     @DeleteMapping("{chatId}")
     fun deleteChat(@PathVariable chatId: UUID, jwt: JwtAuthenticationToken): Unit =
         chatService.deleteChat(chatId, jwt.name)
 
+    /**
+     * Send message to a chat.
+     *
+     * @see ChatService.sendMessage
+     * @returns Tokens of the answer as event stream.
+     */
     @PostMapping("{chatId}/messages", produces = [MediaType.TEXT_EVENT_STREAM_VALUE])
-    fun sendMessageToExistingChat(
+    fun sendMessage(
         @PathVariable chatId: UUID,
         @RequestBody message: String,
         jwt: JwtAuthenticationToken

@@ -14,6 +14,16 @@ type ChatContextType = {
     setSelectedMessageFeedback: Dispatch<SetStateAction<ChatMessageFeedback | undefined>>
 }
 
+
+/**
+ * Use only through useChatContext.
+ *
+ * Provides states and setState for
+ *      * chats for managing all chats
+ *      * selectedChat for managing a selected chat
+ *      * selectedMessageId for managing a selected message
+ *      * selectedMessageFeedback for managing the feedback of a selected message
+ */
 export const ChatContext = createContext<ChatContextType>({
     chats: [],
     setChats: chill,
@@ -25,6 +35,9 @@ export const ChatContext = createContext<ChatContextType>({
     setSelectedMessageFeedback: chill,
 })
 
+/**
+ * Applies the ChatContext
+ */
 export function ChatProvider({ children }: ChildrenProps) {
     const [chats, setChats] = useState<Chat[]>([])
     const [selectedChat, setSelectedChat] = useState<Chat>()

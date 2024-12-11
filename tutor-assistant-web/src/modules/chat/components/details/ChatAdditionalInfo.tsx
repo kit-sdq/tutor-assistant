@@ -1,23 +1,22 @@
-import { Chat, ChatMessageContext, ChatSummary } from '../../chat-model.ts'
+import { Chat } from '../../chat-model.ts'
 import React, { useMemo, useState } from 'react'
 import { Bar } from '../../../../common/components/containers/Bar.tsx'
 import { isNotPresent, isPresent } from '../../../../common/utils/utils.ts'
 import { Header } from '../../../../common/components/containers/Header.tsx'
 import { useTranslation } from 'react-i18next'
-import { Scroller } from '../../../../common/components/containers/Scroller.tsx'
-import { MainContent, Spacer, VStack } from '../../../../common/components/containers/flex-layout.tsx'
-import { Box, Button, Card, CardActions, CardContent, ToggleButtonGroup, Typography } from '@mui/joy'
+import { Button, ToggleButtonGroup } from '@mui/joy'
 import { empty } from '../../../../common/utils/array-utils.ts'
-import { StyledMarkdown } from '../../../../common/components/widgets/StyledMarkdown.tsx'
-import { useOpenContexts } from '../../hooks/useOpenContexts.ts'
-import { Multiline } from '../../../../common/components/widgets/Multiline.tsx'
-import { roundTo } from '../../../../common/utils/math-utils.ts'
+import { ChatSummary } from './ChatSummary.tsx'
+import { ChatContexts } from './ChatContexts.tsx'
 
 interface Props {
     chat: Chat
     selectedMessageId?: string
 }
 
+/**
+ * Right sidebar for displaying either the contexts (sources) or the summary of the selected message.
+ */
 export function ChatAdditionalInfo({ chat, selectedMessageId }: Props) {
     const { t } = useTranslation()
     const [additionalInfo, setAdditionalInfo] = useState<'summary' | 'contexts' | null>('contexts')
@@ -34,122 +33,37 @@ export function ChatAdditionalInfo({ chat, selectedMessageId }: Props) {
 
     if (isNotPresent(additionalInfo)) return <></>
 
-    return <Bar className='right'>
-        <Header
-            title={
-                <ToggleButtonGroup
-                    value={additionalInfo}
-                    onChange={handleTabChange}
-                    spacing={0.01}
-                    variant='plain'
-                    size='sm'
-                >
-                    <Button value='contexts'>{t('Sources')} ({contexts?.length ?? 0})</Button>
-                    <Button value='summary'>{t('Summary')}</Button>
-                </ToggleButtonGroup>
+    return (
+        <Bar className='right'>
+            <Header
+                title={
+                    <ToggleButtonGroup
+                        value={additionalInfo}
+                        onChange={handleTabChange}
+                        spacing={0.01}
+                        variant='plain'
+                        size='sm'
+                    >
+                        <Button value='contexts'>{t('Sources')} ({contexts?.length ?? 0})</Button>
+                        <Button value='summary'>{t('Summary')}</Button>
+                    </ToggleButtonGroup>
+                }
+            />
+            {
+                additionalInfo === 'summary' && <ChatSummary
+                    summary={chat.summary}
+                />
             }
-        />
-        {
-            additionalInfo === 'summary' && <Summary
-                summary={chat.summary}
-            />
-        }
 
-        {
-            additionalInfo === 'contexts' && <Contexts
-                contexts={contexts}
-            />
-        }
-    </Bar>
-}
-
-interface SummaryProps {
-    summary: ChatSummary | undefined
-}
-
-function Summary({ summary }: SummaryProps) {
-
-    return (
-        <>
-            <MainContent>
-                <Scroller padding={1}>
-                    {
-                        isPresent(summary) && (
-                            <Box sx={{ overflow: 'hidden' }}>
-                                <StyledMarkdown>{`## ${summary.title}`}</StyledMarkdown>
-                                <StyledMarkdown>{`### ${summary.subtitle}`}</StyledMarkdown>
-                                <StyledMarkdown>{summary.content}</StyledMarkdown>
-                            </Box>
-                        )
-                    }
-                </Scroller>
-            </MainContent>
-        </>
+            {
+                additionalInfo === 'contexts' && <ChatContexts
+                    contexts={contexts}
+                />
+            }
+        </Bar>
     )
 }
 
 
-interface ContextsProps {
-    contexts: ChatMessageContext[] | undefined
-}
 
-function Contexts({ contexts }: ContextsProps) {
-    const { t } = useTranslation()
-
-    const { openContexts } = useOpenContexts()
-
-    if (isNotPresent(contexts)) contexts = []
-
-    function getTitleAndPage(context: ChatMessageContext) {
-        const pageOutput = isPresent(context.page) ? `, ${t('Page')} ${context.page + 1}` : ''
-        return isPresent(context.title) ? `${context.title}${pageOutput}` : ''
-    }
-
-    if (contexts.length === 0) return (
-        <MainContent>
-            <VStack justifyContent='center' alignItems='center'>
-                <Typography>{t('Select a message')}</Typography>
-            </VStack>
-        </MainContent>
-    )
-
-    return (
-        <>
-            <MainContent>
-                <Scroller padding={1}>
-                    <VStack gap={1}>
-                        {
-                            contexts.map((context, index) => (
-                                <Card key={index}>
-                                    <CardContent sx={{ maxHeight: '300px', overflow: 'auto' }}>
-
-                                        <Typography level='body-sm'>
-                                            {getTitleAndPage(context)}
-                                        </Typography>
-                                        <Typography level='body-sm'>
-                                            {t('Relevance')}: {roundTo(context.score ?? -1, 2)}
-                                        </Typography>
-
-                                        <Multiline text={context.content ?? ''} />
-
-                                    </CardContent>
-                                    {isPresent(context.originalKey) && (
-                                        <CardActions>
-                                            <Spacer />
-                                            <Button variant='outlined' onClick={() => openContexts(context)}>
-                                                {t('Open')}
-                                            </Button>
-                                        </CardActions>
-                                    )}
-                                </Card>
-                            ))
-                        }
-                    </VStack>
-
-                </Scroller>
-            </MainContent>
-
-        </>
-    )
-}
 

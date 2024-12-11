@@ -6,6 +6,9 @@ import jakarta.servlet.http.HttpServletResponse
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 
+/**
+ * OncePerRequestFilter for logging base information about incoming requests and outgoing responses.
+ */
 @Component
 class RequestLoggingFilter : OncePerRequestFilter(), Logger {
 

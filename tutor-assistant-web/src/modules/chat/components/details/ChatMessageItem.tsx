@@ -20,6 +20,15 @@ interface Props {
 }
 
 
+/**
+ * Displays a message in a chat.
+ * Renders ai messages as markdown.
+ * Shows feedback input for selected ai messages.
+ *
+ * @param message to be displayed.
+ * @param onMessageClick callback when a message is clicked.
+ * @param selectedMessageId id of the selected message.
+ */
 export function ChatMessageItem({ message, onMessageClick, selectedMessageId }: Props) {
     const { t } = useTranslation()
 

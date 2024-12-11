@@ -15,7 +15,8 @@ class DomainConfig:
                  resources: dict[str, Any],
                  logger: logging.Logger,
                  language: str,
-                 use_base_retriever: bool = False,
+                 retriever_name: str,
+                 embed_meta_docs: bool
                  ):
         self.chat_model = chat_model
         self.embeddings = embeddings
@@ -23,7 +24,8 @@ class DomainConfig:
         self.resources = resources
         self.logger = logger
         self.language = language
-        self.use_base_retriever = use_base_retriever
+        self.retriever_name = retriever_name
+        self.embed_meta_docs = embed_meta_docs
 
         logger.info('Application configuration complete.')
-        logger.info(f"Using {'base' if use_base_retriever else 'hybrid'} retriever")
+        logger.info(f"retriever_name: {retriever_name}, embed_meta_docs: {embed_meta_docs}")

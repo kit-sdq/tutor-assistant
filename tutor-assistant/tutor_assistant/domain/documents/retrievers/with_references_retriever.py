@@ -43,7 +43,7 @@ class WithReferencesRetriever(BaseRetriever):
             docs, scores = zip(
                 *self._vector_store.similarity_search_with_score(
                     query,
-                    k=8
+                    k=5
                 )
             )
         except Exception as e:
@@ -54,7 +54,7 @@ class WithReferencesRetriever(BaseRetriever):
         for doc, np_score in zip(docs, scores):
             score = float(np_score)
             doc.metadata['score'] = score
-            if np_score < 1.1:
+            if np_score < 5:
                 result.append(doc)
 
         return result

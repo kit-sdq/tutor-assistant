@@ -41,15 +41,39 @@ class ChatService(
     @Value("\${app.tutor-assistant.base-url}")
     private lateinit var baseUrl: String
 
+    /**
+     * Finds the chats of a given user.
+     *
+     * @param userId of the user.
+     * @returns list of users chats. Each chat as ChatBaseData.
+     */
     fun getUsersChats(userId: String) = chatRepo.findByUserIdOrderByCreatedDateDesc(userId).map { ChatBaseData(it) }
 
+    /**
+     * @returns list of all chats. Each chat as ChatBaseData.
+     */
     fun getAllChats() = chatRepo.findAllByOrderByCreatedDateDesc().map { ChatBaseData(it) }
 
+    /**
+     * Finds a chat by its unique id.
+     *
+     * @param chatId of the chat.
+     * @param userId that must match the chats users id in order to retrieve the chat, except...
+     * @param requiresMatchingUser is false.
+     * @returns the found chat as ChatMainData.
+     * @throws IllegalArgumentException iff the id does not exist.
+     */
     fun getChatById(chatId: UUID, userId: String, requiresMatchingUser: Boolean = true): ChatMainData {
         val chat = chatRepo.findByIdOrThrow(chatId).requireUser(userId, requiresMatchingUser)
         return ChatMainData(chat)
     }
 
+    /**
+     * Creates and saves a new chat.
+     *
+     * @param userId for which the chat shall be created.
+     * @returns the new chat as ChatBaseData.
+     */
     fun createChat(userId: String): ChatBaseData {
         val chat = chatRepo.save(Chat(userId)).also {
             log.info("Created chat: ${it.id}")
@@ -57,6 +81,12 @@ class ChatService(
         return ChatBaseData(chat)
     }
 
+    /**
+     * Deletes a chat.
+     *
+     * @param chatId of the chat to be deleted.
+     * @param userId that must match the chats users id in order to perform the deletion.
+     */
     fun deleteChat(chatId: UUID, userId: String) {
         val chat = chatRepo.findByIdOrThrow(chatId).requireUser(userId)
         chatRepo.delete(chat).also {
@@ -64,6 +94,22 @@ class ChatService(
         }
     }
 
+    /**
+     * This method
+     *      * Adds the given message to the chats history
+     *      * Sends it together with the chats history to the RAG-Service
+     *      * Returns the tokens of the response of the RAG-Service
+     *          * Sends MESSAGE_END token when the RAG-Service's response is finished
+     *          * Stores the response of the RAG-Service
+     *      * Loads a new Summary for the new history
+     *          * Sends EVENT_STREAM_END token when Summary is loaded
+     *          * Stores loaded summary
+     *
+     * @param chatId of the chat to which the message shall be sent.
+     * @param message to send.
+     * @param userId that must match the chats users id in order to send the message.
+     * @returns an event stream of the RAG-Services Tokens.
+     */
     @Transactional
     fun sendMessage(chatId: UUID, message: String, userId: String): Flux<String> {
         val chat = chatRepo.findByIdOrThrow(chatId).requireUser(userId)
@@ -73,11 +119,6 @@ class ChatService(
     private fun handleMessageSending(chat: Chat, message: String): Flux<String> {
         val userMessage = Message("user", message)
         chat.addMessage(userMessage)
-
-        /*mono(Dispatchers.IO) {
-            messageRepo.save(userMessage)
-            chatRepo.save(chat)
-        }*/
 
         messageRepo.save(userMessage).also {
             log.info("Created user-message: ${it.id} for chat: ${chat.id}")
@@ -173,11 +214,9 @@ class ChatService(
     private fun getContextFromJson(json: String): MessageContext {
         val root = objectMapper.readTree(json)
         return MessageContext(
-            tutorAssistantId = root.getOrNull("kwargs").getOrNull("metadata").getOrNull("tutorAssistantId")?.asText(),
             title = root.getOrNull("kwargs").getOrNull("metadata").getOrNull("title")?.asText(),
             originalKey = root.getOrNull("kwargs").getOrNull("metadata").getOrNull("originalKey")?.asText(),
             isCalendar = root.getOrNull("kwargs").getOrNull("metadata").getOrNull("isCalendar")?.asBoolean(),
-            heading = root.getOrNull("kwargs").getOrNull("metadata").getOrNull("heading")?.asText(),
             page = root.getOrNull("kwargs").getOrNull("metadata").getOrNull("page")?.asInt(),
             content = root.getOrNull("kwargs").getOrNull("page_content")?.asText(),
             score = root.getOrNull("kwargs").getOrNull("metadata").getOrNull("score")?.asDouble(),

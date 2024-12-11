@@ -24,8 +24,6 @@ class DocumentService:
             doc.metadata['isCalendar'] = is_calendar
             ids.append(doc.id)
 
-        meta_docs = self._get_meta_docs(documents)
-
         store = self._config.vector_store_manager.load()
         store_ids = store.add_documents(documents)
 
@@ -33,9 +31,11 @@ class DocumentService:
             raise RuntimeError(
                 f'ids and store_ids should be equal, but got ids={ids} and store_ids={store_ids}')
 
-        if len(meta_docs) > 0:
-            meta_doc_ids = store.add_documents(meta_docs)
-            store_ids.extend(meta_doc_ids)
+        if self._config.embed_meta_docs:
+            meta_docs = self._get_meta_docs(documents)
+            if len(meta_docs) > 0:
+                meta_doc_ids = store.add_documents(meta_docs)
+                store_ids.extend(meta_doc_ids)
 
         self._config.vector_store_manager.save(store)
 

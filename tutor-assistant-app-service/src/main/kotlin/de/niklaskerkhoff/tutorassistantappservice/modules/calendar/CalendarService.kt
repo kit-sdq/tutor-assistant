@@ -17,6 +17,13 @@ class CalendarService(
     @Value("\${app.tutor-assistant.base-url}")
     private lateinit var baseUrl: String
 
+    /**
+     * Gets the current calendar inserting a given entry.
+     *
+     * @param currentDate of the entry to insert.
+     * @param currentTitle of the entry to insert.
+     * @returns a list of all calendar entries as CalendarFrontendData sorted by their date and time.
+     */
     fun getCalendar(currentDate: String, currentTitle: String) =
         calendarRepo.findFirstByOrderByCreatedDateDesc()
             ?.let { listOf(CalendarEntry(currentTitle, currentDate, null)) + it.entries }
@@ -24,8 +31,11 @@ class CalendarService(
             ?.map { CalendarFrontendData(it, it.date == currentDate) }
             ?: emptyList()
 
-    fun getAllCalendars() = calendarRepo.findAll().sortedBy { it.createdDate }
-
+    /**
+     * Loads a new calendar from the RAG-Service and saves it.
+     *
+     * @returns the new calendar entries sorted by their date and time.
+     */
     fun loadNewCalendar(): List<CalendarEntry> {
 
         data class Response(val entries: List<CalendarEntry>)
@@ -36,7 +46,7 @@ class CalendarService(
             .bodyToMono(Response::class.java)
             .block() ?: throw EmptyResponseBodyException()
 
-        log.info("Retrieved calendar from Tutor Assistant. Size: ${response.entries.size}")
+        log.info("Retrieved calendar from RAG-Service. Size: ${response.entries.size}")
 
         return calendarRepo.save(Calendar(response.entries))
             .also { log.info("Saved calendar: ${it.id}") }

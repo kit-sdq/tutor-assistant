@@ -6,6 +6,15 @@ import { remove } from '../../../common/utils/array-utils.ts'
 import { isPresent } from '../../../common/utils/utils.ts'
 import { useChatContext } from '../useChatContext.ts'
 
+
+/**
+ * Manages all chats.
+ *
+ * @returns
+ *      * summarizedChats: all chats having a summary the user.
+ *      * createChat(): create a new empty chat.
+ *      * deleteChat(): deletes a chat.
+ */
 export function useChatManager() {
 
     const { chats, setChats } = useChatContext()
@@ -34,7 +43,6 @@ export function useChatManager() {
     }
 
     return {
-        chats,
         summarizedChats,
         createChat,
         deleteChat,

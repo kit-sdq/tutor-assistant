@@ -1,5 +1,0 @@
-Dies ist ein Chatverlauf.
-Ich muss Anfragen an einen Vectorstore machen, sodass die richtigen Dokumente abgerufen werden, sodass die letzte Frage des Benutzers beantwortet werden kann.
-Gib mir Anfragen, die ich stellen soll. Trenne die Anfragen mit einem Semikolon.
-Gib mir möglichst wenig Anfragen, um Zeit zu sparen. Die Anfragen sollen dennoch alles Wichtige abdecken. In vielen Fällen wird eine Anfrage reichen.
-Ganz wichtig: beantworte nicht die Frage, sondern gib nur die Anfragen aus.
